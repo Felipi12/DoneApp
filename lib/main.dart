@@ -4,10 +4,11 @@ import 'dart:core';
 import 'dart:io';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
+
+bool _isSwitched = false;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -18,29 +19,27 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'DoneApp',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
+          // This is the theme of your application.
+          //
+          // TRY THIS: Try running your application with "flutter run". You'll see
+          // the application has a blue toolbar. Then, without quitting the app,
+          // try changing the seedColor in the colorScheme below to Colors.green
+          // and then invoke "hot reload" (save your changes or press the "hot
+          // reload" button in a Flutter-supported IDE, or press "r" if you used
+          // the command line to start the app).
+          //
+          // Notice that the counter didn't reset back to zero; the application
+          // state is not lost during the reload. To reset the state, use hot
+          // restart instead.
+          //
+          // This works for code too, not just values: Most code changes can be
+          // tested with just a hot reload.
 
-        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromRGBO(1, 150, 70, 1)),
-        useMaterial3: true,
-        fontFamily: 'RedHatDisplay',
-        canvasColor: Color.fromRGBO(1, 169, 94, 1),
-        iconTheme: IconThemeData(color: Colors.white)
-      ),
-      home: const MyHomePage(title:''),
+          // useMaterial3: true,
+          fontFamily: 'RedHatDisplay',
+          // canvasColor: Color.fromRGBO(1, 169, 94, 1),
+          iconTheme: IconThemeData(color: Colors.white)),
+      home: const MyHomePage(title: ''),
     );
   }
 }
@@ -63,18 +62,25 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+  late final TabController _tabController;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(_handleTabSelection);
+  }
+
+  @override
+  void dispose() {
+    _tabController.removeListener(_handleTabSelection);
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _handleTabSelection() {
+    setState(() {});
   }
 
   @override
@@ -86,135 +92,176 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-
-
-
-
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-        iconTheme: IconThemeData(color: Colors.white),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const <Widget>[
+            Tab(
+              icon: Icon(Icons.calendar_month_outlined),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Tab(
+              icon: Icon(Icons.task_alt_rounded),
+            ),
+            Tab(
+              icon: Icon(Icons.bar_chart),
+            ),
+            Tab(
+              icon: Icon(Icons.share),
             ),
           ],
         ),
+
+        // TRY THIS: Try changing the color here to a specific color (to
+        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
+        // change color while the other colors stay the same.
+        backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+        leading: Image.asset('assets/avatar.png'),
+
+        toolbarHeight: 70,
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Center(
+          child: Text(_getTitleBasedOnTab(_tabController.index)),
+        ),
+        //widget.title
+        iconTheme: IconThemeData(color: Colors.white, size: 40),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      body: TabBarView(
+        controller: _tabController,
+        children: const <Widget>[
+          Center(
+            child: Text("Eventos vem aqui"),
+          ),
+          Center(
+            child: Text("Tarefas vem aqui"),
+          ),
+          Center(
+            child: Text("Métricas vem aqui"),
+          ),
+          Center(
+            child: Text("Compartilhar vem aqui"),
+          ),
+        ],
       ),
 
       endDrawer: Drawer(
+          backgroundColor: Color.fromRGBO(1, 169, 94, 1),
           child: Column(children: <Widget>[
-            ListTile(
-              contentPadding: EdgeInsets.fromLTRB(10, 25, 0, 0),
-              leading: Icon(Icons.menu, size: 40),
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.check,
-                color: Color.fromRGBO(1, 169, 94, 1),
-                size: 30,
+            Align(
+              alignment: Alignment.center,
+              child: ListTile(
+                contentPadding: EdgeInsets.fromLTRB(10, 45, 10, 0),
+                leading: Icon(Icons.menu, size: 40),
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                trailing: SizedBox(
+                    width: 120.0, // Set this width
+                    height: 120.0, // Set this height
+                    child: Image.asset("assets/done_logo_white.png")),
               ),
-              title: Text("Cumpridas",
-                  style: TextStyle(color: Color.fromRGBO(1, 169, 94, 1), fontSize: 25)),
             ),
-            ListTile(
-              leading: Icon(Icons.panorama_fish_eye,
-                  color: Color.fromRGBO(1, 169, 94, 1),
-                  size: 30),
-              title: Text("A cumprir",
-                  style: TextStyle(color: Color.fromRGBO(1, 169, 94, 1), fontSize: 25)),
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+              child: Column(children: <Widget>[
+                ListTile(
+                  leading: Icon(
+                    Icons.calendar_month_outlined,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  title: Text("Agenda",
+                      style: TextStyle(
+                          fontFamily: 'Roboto',
+                          color: Colors.white,
+                          fontSize: 20)),
+                ),
+                ListTile(
+                  leading: Icon(Icons.task_alt, color: Colors.white, size: 30),
+                  title: Text("Tarefas",
+                      style: TextStyle(
+                          fontFamily: 'Roboto',
+                          color: Colors.white,
+                          fontSize: 20)),
+                ),
+                ListTile(
+                  leading: Icon(Icons.bar_chart_outlined,
+                      color: Colors.white, size: 30),
+                  title: Text("Métricas",
+                      style: TextStyle(
+                          fontFamily: 'Roboto',
+                          color: Colors.white,
+                          fontSize: 20)),
+                ),
+                ListTile(
+                  leading: Icon(Icons.share, color: Colors.white, size: 30),
+                  title: Text("Compartilhar",
+                      style: TextStyle(
+                          fontFamily: 'Roboto',
+                          color: Colors.white,
+                          fontSize: 20)),
+                ),
+              ]),
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(
-                  30, MediaQuery.of(context).size.height * .60, 0, 10),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Image.asset("assets/done_icon.png",),
+                  0, MediaQuery.of(context).size.height * .45, 0, 10),
+              child: ListTile(
+                trailing: Stack(
+                  clipBehavior: Clip.none,
+                  children: <Widget>[
+                    Switch(
+                      value: _isSwitched,
+                      onChanged: (value) {
+                        setState(() {
+                          _isSwitched = value;
+                        });
+                      },
+                    ),
+                    Positioned(
+                      top: -10, // Adjust this value to move the icon up or down
+                      left: 18,
+                      child: Icon(
+                          _isSwitched
+                              ? Icons.nightlight_outlined
+                              : Icons.wb_sunny_outlined,
+                          size: 20,
+                          color: Colors
+                              .white // Adjust this value to change the icon size
+                          ),
+                    ),
+                  ],
+                ),
+                leading: Icon(
+                  Icons.format_size,
+                  color: Colors.white,
+                  size: 50,
+                ),
               ),
             ),
           ])),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+
+
+  String _getTitleBasedOnTab(int index) {
+    switch (index) {
+      case 0:
+        return 'Agenda';
+      case 1:
+        return 'Tarefas';
+      case 2:
+        return 'Métricas';
+      case 3:
+        return 'Compartilhar';
+      default:
+        return '';
+    }
+  }
+
+
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
