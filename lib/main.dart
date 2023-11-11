@@ -38,6 +38,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   late final TabController _tabController;
+  int _selectedIndex = 0; // Variável para rastrear o índice da aba selecionada
 
   final CalendarController _controller = CalendarController();
 
@@ -45,6 +46,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(() {
+      if (_selectedIndex != _tabController.index) {
+        setState(() {
+          _selectedIndex = _tabController.index;
+        });
+      }
+    });
   }
 
   // Limpa os recursos quando o widget é descartado
@@ -54,11 +62,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  // Constrói o layout da página principal
+  // Constrói o layout
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(tabController: _tabController),
+      appBar: CustomAppBar(
+          tabController: _tabController, selectedIndex: _selectedIndex),
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
@@ -68,15 +77,34 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           const Center(child: Text("Compartilhar vem aqui")),
         ],
       ),
-      endDrawer: CustomDrawer(),
+      endDrawer: CustomDrawer(tabController: _tabController),
+      floatingActionButton:
+          _tabController.index == 0 || _tabController.index == 1
+              ? Padding(
+                  padding: EdgeInsets.only(bottom: 16.0),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        // TODO: Lógica para adicionar um novo compromisso
+                      },
+                      child: Icon(Icons.add),
+                      backgroundColor: Colors.green,
+                    ),
+                  ),
+                )
+              : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
 
+// Constrói o Appbar/Navbar
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TabController tabController;
+  final int selectedIndex;
 
-  CustomAppBar({required this.tabController});
+  CustomAppBar({required this.tabController, required this.selectedIndex});
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight + 30);
@@ -97,7 +125,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: Image.asset('assets/avatar.png'),
       toolbarHeight: 70,
       title: Center(
-        child: Text(_getTitleBasedOnTab(tabController.index)),
+        child: Text(_getTitleBasedOnTab(selectedIndex)),
       ),
       iconTheme: IconThemeData(color: Colors.white, size: 40),
     );
@@ -119,6 +147,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
+// Constrói o calendário da tela de Agenda
 class TabViewItem extends StatelessWidget {
   final CalendarController controller;
 
@@ -177,15 +206,14 @@ class _CustomSwitchState extends State<CustomSwitch> {
             },
           ),
           Positioned(
-            top: -10, // Adjust this value to move the icon up or down
+            top: -10,
             left: 18,
             child: Icon(
                 _isSwitched
                     ? Icons.nightlight_outlined
                     : Icons.wb_sunny_outlined,
                 size: 20,
-                color: Colors.white // Adjust this value to change the icon size
-                ),
+                color: Colors.white),
           ),
         ],
       ),
@@ -198,74 +226,88 @@ class _CustomSwitchState extends State<CustomSwitch> {
   }
 }
 
+// Constrói o Drawer/Sidebar
 class CustomDrawer extends StatelessWidget {
+  final TabController tabController;
+
+  CustomDrawer({required this.tabController});
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
-        backgroundColor: Color.fromRGBO(1, 169, 94, 1),
-        child: Column(children: <Widget>[
-          Align(
-            alignment: Alignment.center,
-            child: ListTile(
-              contentPadding: EdgeInsets.fromLTRB(10, 45, 10, 0),
-              leading: Icon(Icons.menu, size: 40),
+      backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+      child: Column(children: <Widget>[
+        Align(
+          alignment: Alignment.center,
+          child: ListTile(
+            contentPadding: EdgeInsets.fromLTRB(10, 34, 10, 0),
+            leading: Icon(Icons.menu, size: 40),
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            trailing: SizedBox(
+                width: 120.0,
+                height: 120.0,
+                child: Image.asset("assets/done_logo_white.png")),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+          child: Column(children: <Widget>[
+            ListTile(
+              leading: Icon(
+                Icons.calendar_month_outlined,
+                color: Colors.white,
+                size: 30,
+              ),
+              title: Text("Agenda",
+                  style: TextStyle(
+                      fontFamily: 'Roboto', color: Colors.white, fontSize: 20)),
               onTap: () {
                 Navigator.of(context).pop();
+                tabController.animateTo(0);
               },
-              trailing: SizedBox(
-                  width: 120.0,
-                  height: 120.0,
-                  child: Image.asset("assets/done_logo_white.png")),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
-            child: Column(children: <Widget>[
-              ListTile(
-                leading: Icon(
-                  Icons.calendar_month_outlined,
-                  color: Colors.white,
-                  size: 30,
-                ),
-                title: Text("Agenda",
-                    style: TextStyle(
-                        fontFamily: 'Roboto',
-                        color: Colors.white,
-                        fontSize: 20)),
-              ),
-              ListTile(
-                leading: Icon(Icons.task_alt, color: Colors.white, size: 30),
-                title: Text("Tarefas",
-                    style: TextStyle(
-                        fontFamily: 'Roboto',
-                        color: Colors.white,
-                        fontSize: 20)),
-              ),
-              ListTile(
-                leading: Icon(Icons.bar_chart_outlined,
-                    color: Colors.white, size: 30),
-                title: Text("Métricas",
-                    style: TextStyle(
-                        fontFamily: 'Roboto',
-                        color: Colors.white,
-                        fontSize: 20)),
-              ),
-              ListTile(
-                leading: Icon(Icons.share, color: Colors.white, size: 30),
-                title: Text("Compartilhar",
-                    style: TextStyle(
-                        fontFamily: 'Roboto',
-                        color: Colors.white,
-                        fontSize: 20)),
-              ),
-            ]),
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-                0, MediaQuery.of(context).size.height * .45, 0, 10),
-            child: CustomSwitch(),
-          ),
-        ]));
+            ListTile(
+              leading: Icon(Icons.task_alt, color: Colors.white, size: 30),
+              title: Text("Tarefas",
+                  style: TextStyle(
+                      fontFamily: 'Roboto', color: Colors.white, fontSize: 20)),
+              onTap: () {
+                Navigator.of(context).pop();
+                tabController.animateTo(1);
+              },
+            ),
+            ListTile(
+              leading:
+                  Icon(Icons.bar_chart_outlined, color: Colors.white, size: 30),
+              title: Text("Métricas",
+                  style: TextStyle(
+                      fontFamily: 'Roboto', color: Colors.white, fontSize: 20)),
+              onTap: () {
+                Navigator.of(context).pop();
+                tabController.animateTo(2);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.share, color: Colors.white, size: 30),
+              title: Text("Compartilhar",
+                  style: TextStyle(
+                      fontFamily: 'Roboto', color: Colors.white, fontSize: 20)),
+              onTap: () {
+                Navigator.of(context).pop();
+                tabController.animateTo(3);
+              },
+            ),
+          ]),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(
+              0, MediaQuery.of(context).size.height * .45, 0, 10),
+          child: CustomSwitch(),
+        ),
+      ]),
+    );
   }
 }
 
