@@ -7,8 +7,6 @@ void main() {
   runApp(const MyApp());
 }
 
-bool _isSwitched = false;
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -19,7 +17,8 @@ class MyApp extends StatelessWidget {
       title: 'DoneApp',
       theme: ThemeData(
         fontFamily: 'RedHatDisplay', // Define a fonte padrão do aplicativo
-        iconTheme: IconThemeData(color: Colors.white), // Define o tema do ícone
+        iconTheme:
+            const IconThemeData(color: Colors.white), // Define o tema do ícone
       ),
       home:
           const MyHomePage(title: ''), // Define a página inicial do aplicativo
@@ -81,15 +80,15 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       floatingActionButton:
           _tabController.index == 0 || _tabController.index == 1
               ? Padding(
-                  padding: EdgeInsets.only(bottom: 16.0),
+                  padding: const EdgeInsets.only(bottom: 16.0),
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: FloatingActionButton(
                       onPressed: () {
                         // TODO: Lógica para adicionar um novo compromisso
                       },
-                      child: Icon(Icons.add),
                       backgroundColor: Colors.green,
+                      child: const Icon(Icons.add),
                     ),
                   ),
                 )
@@ -104,10 +103,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TabController tabController;
   final int selectedIndex;
 
-  CustomAppBar({required this.tabController, required this.selectedIndex});
+  const CustomAppBar(
+      {super.key, required this.tabController, required this.selectedIndex});
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight + 30);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 30);
 
   @override
   Widget build(BuildContext context) {
@@ -121,13 +121,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           Tab(icon: Icon(Icons.share)),
         ],
       ),
-      backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+      backgroundColor: const Color.fromRGBO(1, 169, 94, 1),
       leading: Image.asset('assets/avatar.png'),
       toolbarHeight: 70,
       title: Center(
         child: Text(_getTitleBasedOnTab(selectedIndex)),
       ),
-      iconTheme: IconThemeData(color: Colors.white, size: 40),
+      iconTheme: const IconThemeData(color: Colors.white, size: 40),
     );
   }
 
@@ -151,12 +151,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 class TabViewItem extends StatelessWidget {
   final CalendarController controller;
 
-  TabViewItem({required this.controller});
+  const TabViewItem({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return SfCalendar(
-      view: CalendarView.week,
+      view: CalendarView.day,
       allowedViews: const [
         CalendarView.day,
         CalendarView.week,
@@ -184,11 +184,13 @@ class TabViewItem extends StatelessWidget {
 }
 
 class CustomSwitch extends StatefulWidget {
+  const CustomSwitch({super.key});
+
   @override
-  _CustomSwitchState createState() => _CustomSwitchState();
+  CustomSwitchState createState() => CustomSwitchState();
 }
 
-class _CustomSwitchState extends State<CustomSwitch> {
+class CustomSwitchState extends State<CustomSwitch> {
   bool _isSwitched = false;
 
   @override
@@ -217,7 +219,7 @@ class _CustomSwitchState extends State<CustomSwitch> {
           ),
         ],
       ),
-      leading: Icon(
+      leading: const Icon(
         Icons.format_size,
         color: Colors.white,
         size: 50,
@@ -230,18 +232,18 @@ class _CustomSwitchState extends State<CustomSwitch> {
 class CustomDrawer extends StatelessWidget {
   final TabController tabController;
 
-  CustomDrawer({required this.tabController});
+  const CustomDrawer({super.key, required this.tabController});
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+      backgroundColor: const Color.fromRGBO(1, 169, 94, 1),
       child: Column(children: <Widget>[
         Align(
           alignment: Alignment.center,
           child: ListTile(
-            contentPadding: EdgeInsets.fromLTRB(10, 34, 10, 0),
-            leading: Icon(Icons.menu, size: 40),
+            contentPadding: const EdgeInsets.fromLTRB(10, 34, 10, 0),
+            leading: const Icon(Icons.menu, size: 40),
             onTap: () {
               Navigator.of(context).pop();
             },
@@ -252,15 +254,15 @@ class CustomDrawer extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(0, 50, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
           child: Column(children: <Widget>[
             ListTile(
-              leading: Icon(
+              leading: const Icon(
                 Icons.calendar_month_outlined,
                 color: Colors.white,
                 size: 30,
               ),
-              title: Text("Agenda",
+              title: const Text("Agenda",
                   style: TextStyle(
                       fontFamily: 'Roboto', color: Colors.white, fontSize: 20)),
               onTap: () {
@@ -269,8 +271,9 @@ class CustomDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.task_alt, color: Colors.white, size: 30),
-              title: Text("Tarefas",
+              leading:
+                  const Icon(Icons.task_alt, color: Colors.white, size: 30),
+              title: const Text("Tarefas",
                   style: TextStyle(
                       fontFamily: 'Roboto', color: Colors.white, fontSize: 20)),
               onTap: () {
@@ -279,9 +282,9 @@ class CustomDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading:
-                  Icon(Icons.bar_chart_outlined, color: Colors.white, size: 30),
-              title: Text("Métricas",
+              leading: const Icon(Icons.bar_chart_outlined,
+                  color: Colors.white, size: 30),
+              title: const Text("Métricas",
                   style: TextStyle(
                       fontFamily: 'Roboto', color: Colors.white, fontSize: 20)),
               onTap: () {
@@ -290,8 +293,8 @@ class CustomDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.share, color: Colors.white, size: 30),
-              title: Text("Compartilhar",
+              leading: const Icon(Icons.share, color: Colors.white, size: 30),
+              title: const Text("Compartilhar",
                   style: TextStyle(
                       fontFamily: 'Roboto', color: Colors.white, fontSize: 20)),
               onTap: () {
@@ -304,7 +307,7 @@ class CustomDrawer extends StatelessWidget {
         Padding(
           padding: EdgeInsets.fromLTRB(
               0, MediaQuery.of(context).size.height * .45, 0, 10),
-          child: CustomSwitch(),
+          child: const CustomSwitch(),
         ),
       ]),
     );
@@ -312,7 +315,7 @@ class CustomDrawer extends StatelessWidget {
 }
 
 class CalendarDataSourceUtility {
-  static _DataSource getCalendarDataSource() {
+  static DataSource getCalendarDataSource() {
     final List<Appointment> appointments = <Appointment>[];
     appointments.add(Appointment(
       startTime: DateTime.now(),
@@ -345,12 +348,12 @@ class CalendarDataSourceUtility {
       color: Colors.purple,
     ));
 
-    return _DataSource(appointments);
+    return DataSource(appointments);
   }
 }
 
-class _DataSource extends CalendarDataSource {
-  _DataSource(this.source);
+class DataSource extends CalendarDataSource {
+  DataSource(this.source);
 
   List<Appointment> source;
 
