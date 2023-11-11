@@ -244,8 +244,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 
-
-
   String _getTitleBasedOnTab(int index) {
     switch (index) {
       case 0:
@@ -260,8 +258,4 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         return '';
     }
   }
-
-
-
-
 }
