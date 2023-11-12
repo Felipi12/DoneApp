@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "747727448669",
+    "firebase_url": "https://done-app-b0985-default-rtdb.firebaseio.com",
+    "project_id": "done-app-b0985",
+    "storage_bucket": "done-app-b0985.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:747727448669:android:fe325c870994994f3a3bb4",
+        "android_client_info": {
+          "package_name": "com.cefet.doneapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkadJbKi_cWPgTuwkc9ZXNwloDVdgD8yw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
