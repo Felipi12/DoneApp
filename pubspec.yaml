@@ -27,7 +27,7 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
-dependencies:
+dependencies:  
   flutter:
     sdk: flutter
   syncfusion_flutter_calendar: ^23.1.43
@@ -40,6 +40,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   path_provider: ^2.1.1
   intl: ^0.18.1
+  firebase_core: ^2.22.0
+  cloud_firestore: ^4.13.0
 
 dev_dependencies:
   flutter_test:
