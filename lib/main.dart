@@ -84,9 +84,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: FloatingActionButton(
-                      onPressed: () {
-                        // TODO: Lógica para adicionar um novo compromisso
-                      },
+                      onPressed: _showAddAppointmentDialog,
                       backgroundColor: Colors.green,
                       child: const Icon(Icons.add),
                     ),
@@ -94,6 +92,123 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 )
               : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+
+  void _showAddAppointmentDialog() {
+    TextEditingController subjectController = TextEditingController();
+    TextEditingController descriptionController = TextEditingController();
+    TextEditingController dateController = TextEditingController();
+    TextEditingController timeController = TextEditingController();
+    DateTime? selectedDate = DateTime.now();
+    TimeOfDay? selectedTime = TimeOfDay.now();
+    List<String> repeatDays = [];
+    Color selectedColor = Colors.blue;
+
+    // Atualiza o controlador de data
+    void _updateDateField(DateTime selectedDate) {
+      dateController.text =
+          "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+    }
+
+    // Atualiza o controlador de hora
+    void _updateTimeField(TimeOfDay selectedTime) {
+      timeController.text = selectedTime.format(context);
+    }
+
+    // Função para escolher e atualizar a data
+    Future<void> _selectDate(BuildContext context) async {
+      final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate!,
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100),
+      );
+      if (picked != null && picked != selectedDate) {
+        selectedDate = picked;
+        _updateDateField(picked);
+      }
+    }
+
+    // Função para escolher e atualizar a hora
+    Future<void> _selectTime(BuildContext context) async {
+      final TimeOfDay? picked = await showTimePicker(
+        context: context,
+        initialTime: selectedTime!,
+      );
+      if (picked != null && picked != selectedTime) {
+        selectedTime = picked;
+        _updateTimeField(picked);
+      }
+    }
+
+    // Exibe o diálogo para adicionar um novo compromisso
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Usuário deve tocar no botão para fechar
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Novo Compromisso'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                TextFormField(
+                  controller: subjectController,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.subject),
+                    labelText: 'Assunto',
+                  ),
+                ),
+                TextFormField(
+                  controller: dateController,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.calendar_today),
+                    labelText: 'Data',
+                  ),
+                  onTap: () => _selectDate(context),
+                  readOnly: true,
+                ),
+                TextFormField(
+                  controller: timeController,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.access_time),
+                    labelText: 'Hora',
+                  ),
+                  onTap: () => _selectTime(context),
+                  readOnly: true,
+                ),
+                // TODO: Aqui você adicionaria widgets para seleção de dias de repetição
+                TextField(
+                  controller: descriptionController,
+                  decoration: const InputDecoration(
+                    labelText: 'Descrição',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 3,
+                ),
+                // TODO: Aqui você adicionaria o seletor de cor
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('CANCELAR'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                // Aqui, você coletaria todas as informações dos campos
+                // e as adicionaria à fonte de dados do seu calendário.
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
