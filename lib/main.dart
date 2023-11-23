@@ -79,8 +79,48 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     super.dispose();
   }
 
+<<<<<<< Updated upstream
   void _handleTabSelection() {
     setState(() {});
+=======
+  // Constrói o layout
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar(
+          tabController: _tabController, selectedIndex: _selectedIndex),
+      bottomNavigationBar:  SizedBox(
+    height: 58,
+    child:TabBar(
+        controller: _tabController,
+        tabs: const <Widget>[
+          Tab(icon: Icon(Icons.calendar_month_outlined, color: Colors.green,)),
+          Tab(icon: Icon(Icons.task_alt_rounded, color: Colors.green)),
+          Tab(icon: Icon(Icons.bar_chart, color: Colors.green)),
+          Tab(icon: Icon(Icons.share, color: Colors.green)),
+        ],
+      )),
+      body: TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+          TabViewItem(controller: _controller),
+          const Center(child: Text("Tarefas vem aqui")),
+          const Center(child: Text("Métricas vem aqui")),
+          const Center(child: Text("Compartilhar vem aqui")),
+        ],
+      ),
+      endDrawer: CustomDrawer(tabController: _tabController),
+      floatingActionButton:
+          _tabController.index == 0 || _tabController.index == 1
+              ? FloatingActionButton(
+            onPressed: _showAddAppointmentDialog,
+            backgroundColor: Colors.green,
+            child: const Icon(Icons.add),
+          )
+              : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+>>>>>>> Stashed changes
   }
 
   @override
@@ -117,6 +157,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         backgroundColor: Color.fromRGBO(1, 169, 94, 1),
         leading: Image.asset('assets/avatar.png'),
 
+<<<<<<< Updated upstream
         toolbarHeight: 70,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -241,6 +282,24 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             ),
           ])),
       // This trailing comma makes auto-formatting nicer for build methods.
+=======
+  const CustomAppBar(
+      {super.key, required this.tabController, required this.selectedIndex});
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 30);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+
+      backgroundColor: const Color.fromRGBO(1, 169, 94, 1),
+      leading: Image.asset('assets/avatar.png'),
+      title: Center(
+        child: Text(_getTitleBasedOnTab(selectedIndex)),
+      ),
+      iconTheme: const IconThemeData(color: Colors.white, size: 40),
+>>>>>>> Stashed changes
     );
   }
 
