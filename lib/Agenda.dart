@@ -1,7 +1,6 @@
 // Importa os pacotes necessários
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'AppBar.dart';
 
 // Constrói o calendário da tela de Agenda
 class TabViewItem_1 extends StatelessWidget {
@@ -24,8 +23,8 @@ class TabViewItem_1 extends StatelessWidget {
       view: CalendarView.week,
       showWeekNumber: true,
       weekNumberStyle: const WeekNumberStyle(
-        backgroundColor: Colors.grey,
-        textStyle: TextStyle(color: Colors.black, fontSize: 13),
+        backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+        textStyle: TextStyle(color: Colors.black, fontSize: 11),
       ),
       allowedViews: const [
         CalendarView.day,
@@ -68,12 +67,6 @@ class CalendarDataSourceUtility {
       endTime: DateTime.now().add(const Duration(hours: 5)),
       subject: 'Release Meeting',
       color: Colors.lightBlueAccent,
-    ));
-    appointments.add(Appointment(
-      startTime: DateTime.now().add(const Duration(hours: 6)),
-      endTime: DateTime.now().add(const Duration(hours: 7)),
-      subject: 'Performance check',
-      color: Colors.amber,
     ));
     appointments.add(Appointment(
       startTime: DateTime(2023, 11, 22, 1, 0, 0),

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'Agenda.dart';
+import 'Métricas.dart';
 import 'AppBar.dart';
 import 'firebase_options.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -195,13 +196,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         children: <Widget>[
           TabViewItem_1(controller: _controller),
           const Center(child: Text("Tarefas vem aqui")),
-          const Center(child: Text("Métricas vem aqui")),
+          MetricsTab(),
           const Center(child: Text("Compartilhar vem aqui")),
         ],
       ),
       endDrawer: CustomDrawer(tabController: _tabController),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 45.0),
+        padding: const EdgeInsets.only(bottom: 50.0),
         child: Align(
             alignment: Alignment.bottomCenter,
             child: AnimatedOpacity(
