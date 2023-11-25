@@ -13,18 +13,26 @@ class TabViewItem_1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return SfCalendar(
       viewHeaderStyle:
-      ViewHeaderStyle(dateTextStyle: TextStyle(fontFamily: 'Roboto')),
+          ViewHeaderStyle(dateTextStyle: TextStyle(fontFamily: 'Roboto')),
       todayTextStyle: TextStyle(fontFamily: 'RedHatDisplay'),
       appointmentTextStyle:
-      TextStyle(color: Colors.white, fontFamily: 'Roboto'),
+          TextStyle(color: Colors.white, fontFamily: 'Roboto'),
+      showNavigationArrow: true,
+      showCurrentTimeIndicator: true,
       headerStyle:
-      CalendarHeaderStyle(textStyle: TextStyle(fontFamily: 'Roboto')),
+          CalendarHeaderStyle(textStyle: TextStyle(fontFamily: 'Roboto')),
       view: CalendarView.week,
+      showWeekNumber: true,
+      weekNumberStyle: const WeekNumberStyle(
+        backgroundColor: Colors.grey,
+        textStyle: TextStyle(color: Colors.black, fontSize: 13),
+      ),
       allowedViews: const [
         CalendarView.day,
         CalendarView.week,
         CalendarView.month,
       ],
+      cellEndPadding: 0,
       controller: controller,
       initialDisplayDate: DateTime.now(),
       dataSource: CalendarDataSourceUtility.getCalendarDataSource(),
@@ -39,15 +47,12 @@ class TabViewItem_1 extends StatelessWidget {
         calendarTapDetails.targetElement == CalendarElement.calendarCell) {
       controller.view = CalendarView.day;
     } else if ((controller.view == CalendarView.week ||
-        controller.view == CalendarView.workWeek) &&
+            controller.view == CalendarView.workWeek) &&
         calendarTapDetails.targetElement == CalendarElement.viewHeader) {
       controller.view = CalendarView.day;
     }
   }
 }
-
-
-
 
 class CalendarDataSourceUtility {
   static DataSource getCalendarDataSource() {
@@ -87,8 +92,6 @@ class CalendarDataSourceUtility {
   }
 }
 
-
-
 class DataSource extends CalendarDataSource {
   DataSource(this.source);
 
@@ -97,6 +100,3 @@ class DataSource extends CalendarDataSource {
   @override
   List<dynamic> get appointments => source;
 }
-
-
-

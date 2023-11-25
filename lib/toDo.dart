@@ -1,10 +1,8 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
 
 import 'package:intl/intl.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -12,7 +10,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 void main() {
   runApp(MaterialApp(
     theme: ThemeData(fontFamily: 'cocogroose'),
-
     localizationsDelegates: [
       GlobalMaterialLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate
@@ -31,8 +28,8 @@ class _HomeState extends State<Home> {
   final _toDoController = TextEditingController();
 
   List _toDoList = [];
-  Map<String, dynamic> _lastRemoved;
-  int _lastRemovedPosition;
+  late Map<String, dynamic> _lastRemoved;
+  late int _lastRemovedPosition;
 
   @override
   void initState() {
@@ -40,7 +37,7 @@ class _HomeState extends State<Home> {
 
     _readData().then((data) {
       setState(() {
-        _toDoList = json.decode(data);
+        _toDoList = json.decode(data!);
       });
     });
   }
@@ -85,37 +82,37 @@ class _HomeState extends State<Home> {
     return Scaffold(
         drawer: Drawer(
             child: Column(children: <Widget>[
-              ListTile(
-                contentPadding: EdgeInsets.fromLTRB(10, 25, 0, 0),
-                leading: Icon(Icons.menu, size: 40),
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.check,
-                  color: Colors.redAccent,
-                  size: 30,
-                ),
-                title: Text("Cumpridas",
-                    style: TextStyle(color: Colors.redAccent, fontSize: 25)),
-              ),
-              ListTile(
-                leading: Icon(Icons.panorama_fish_eye,
-                    color: Colors.redAccent, size: 30),
-                title: Text("A cumprir",
-                    style: TextStyle(color: Colors.redAccent, fontSize: 25)),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(
-                    30, MediaQuery.of(context).size.height * .60, 0, 10),
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Image.asset("images/check_logo.png", scale: 1.2),
-                ),
-              ),
-            ])),
+          ListTile(
+            contentPadding: EdgeInsets.fromLTRB(10, 25, 0, 0),
+            leading: Icon(Icons.menu, size: 40),
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.check,
+              color: Colors.redAccent,
+              size: 30,
+            ),
+            title: Text("Cumpridas",
+                style: TextStyle(color: Colors.redAccent, fontSize: 25)),
+          ),
+          ListTile(
+            leading: Icon(Icons.panorama_fish_eye,
+                color: Colors.redAccent, size: 30),
+            title: Text("A cumprir",
+                style: TextStyle(color: Colors.redAccent, fontSize: 25)),
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+                30, MediaQuery.of(context).size.height * .60, 0, 10),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: Image.asset("images/check_logo.png", scale: 1.2),
+            ),
+          ),
+        ])),
         floatingActionButton: Builder(
           builder: (context) => FloatingActionButton(
             child: Icon(Icons.add),
@@ -163,93 +160,98 @@ class _HomeState extends State<Home> {
               ),
               SliverList(
                   delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                      return Dismissible(
-                        key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
-                        background: Container(
-                            color: Colors.grey,
-                            child: Align(
-                                alignment: Alignment(-0.9, 0),
-                                child: Icon(Icons.delete, color: Colors.white))),
-                        direction: DismissDirection.startToEnd,
-                        child: Card(
-                          elevation: 5,
-                          child: ClipPath(
-                            child: Container(
-                              child: ListTile(
-                                leading: CircularCheckBox(
-                                  materialTapTargetSize:
-                                  MaterialTapTargetSize.padded,
-                                  activeColor: Colors.grey,
-                                  checkColor: Colors.white,
-                                  value: _toDoList[index]["ok"],
-                                  onChanged: (state) {
-                                    setState(() {
-                                      _toDoList[index]["ok"] = state;
-                                      _saveData();
-                                    });
-                                  },
-                                ),
-                                title: Text(
-                                  _toDoList[index]["title"],
-                                  style: TextStyle(color: Colors.redAccent),
-                                ),
-                                trailing: _toDoList[index]["ok"]
-                                    ? CircleAvatar(
-                                  child: Icon(Icons.done),
-                                  backgroundColor: Colors.redAccent,
-                                )
-                                    : null,
-                              ),
-                              height: 60,
-                              decoration: BoxDecoration(
-                                  color: _toDoList[index]["ok"]
-                                      ? Color.fromRGBO(221, 221, 219, 1)
-                                      : Colors.white,
-                                  border: Border(
-                                      right: BorderSide(
-                                          color: _toDoList[index]["ok"]
-                                              ? Colors.grey
-                                              : Colors.redAccent,
-                                          width: 5))),
+                (BuildContext context, int index) {
+                  return Dismissible(
+                    key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
+                    background: Container(
+                        color: Colors.grey,
+                        child: Align(
+                            alignment: Alignment(-0.9, 0),
+                            child: Icon(Icons.delete, color: Colors.white))),
+                    direction: DismissDirection.startToEnd,
+                    child: Card(
+                      elevation: 5,
+                      child: ClipPath(
+                        child: Container(
+                          child: ListTile(
+                            leading: Checkbox(
+                              checkColor: Colors.white,
+                              fillColor: MaterialStateProperty.resolveWith(
+                                  (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.selected)) {
+                                  return Colors.grey;
+                                }
+                                return null;
+                              }),
+                              value: _toDoList[index]["ok"],
+                              shape: CircleBorder(),
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  _toDoList[index]["ok"] = value!;
+                                  _saveData();
+                                });
+                              },
                             ),
-                            clipper: ShapeBorderClipper(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(3))),
+                            title: Text(
+                              _toDoList[index]["title"],
+                              style: TextStyle(color: Colors.redAccent),
+                            ),
+                            trailing: _toDoList[index]["ok"]
+                                ? CircleAvatar(
+                                    child: Icon(Icons.done),
+                                    backgroundColor: Colors.redAccent,
+                                  )
+                                : null,
                           ),
+                          height: 60,
+                          decoration: BoxDecoration(
+                              color: _toDoList[index]["ok"]
+                                  ? Color.fromRGBO(221, 221, 219, 1)
+                                  : Colors.white,
+                              border: Border(
+                                  right: BorderSide(
+                                      color: _toDoList[index]["ok"]
+                                          ? Colors.grey
+                                          : Colors.redAccent,
+                                      width: 5))),
                         ),
-                        onDismissed: (direction) {
-                          setState(() {
-                            _lastRemoved = Map.from(_toDoList[index]);
-                            _lastRemovedPosition = index;
-                            _toDoList.removeAt(index);
+                        clipper: ShapeBorderClipper(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(3))),
+                      ),
+                    ),
+                    onDismissed: (direction) {
+                      setState(() {
+                        _lastRemoved = Map.from(_toDoList[index]);
+                        _lastRemovedPosition = index;
+                        _toDoList.removeAt(index);
 
-                            _saveData();
+                        _saveData();
 
-                            final snack = SnackBar(
-                              backgroundColor: Colors.white,
-                              content: Text(
-                                  "Tarefa \"${_lastRemoved["title"]}\" removida com sucesso",
-                                  style: TextStyle(color: Colors.grey)),
-                              action: SnackBarAction(
-                                  label: "Desfazer",
-                                  textColor: Colors.redAccent,
-                                  onPressed: () {
-                                    setState(() {
-                                      _toDoList.insert(
-                                          _lastRemovedPosition, _lastRemoved);
-                                      _saveData();
-                                    });
-                                  }),
-                              duration: Duration(seconds: 3),
-                            );
-                            Scaffold.of(context).showSnackBar(snack);
-                          });
-                        },
-                      );
+                        final snack = SnackBar(
+                          backgroundColor: Colors.white,
+                          content: Text(
+                              "Tarefa \"${_lastRemoved["title"]}\" removida com sucesso",
+                              style: TextStyle(color: Colors.grey)),
+                          action: SnackBarAction(
+                              label: "Desfazer",
+                              textColor: Colors.redAccent,
+                              onPressed: () {
+                                setState(() {
+                                  _toDoList.insert(
+                                      _lastRemovedPosition, _lastRemoved);
+                                  _saveData();
+                                });
+                              }),
+                          duration: Duration(seconds: 3),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snack);
+                      });
                     },
-                    childCount: _toDoList.length,
-                  )),
+                  );
+                },
+                childCount: _toDoList.length,
+              )),
               //SliverList(delegate: SliverChildListDelegate([aWidget()]))
             ],
           ),
@@ -272,15 +274,17 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: _addToDo,
-                color: Colors.redAccent,
                 child: Text("Add"),
-                textColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100.0),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.redAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100.0),
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -299,7 +303,7 @@ class _HomeState extends State<Home> {
     return file.writeAsString(data);
   }
 
-  Future<String> _readData() async {
+  Future<String?> _readData() async {
     try {
       final file = await _getFile();
 
@@ -332,15 +336,17 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       ),
-                      RaisedButton(
+                      ElevatedButton(
                         onPressed: _addToDo,
-                        color: Colors.redAccent,
                         child: Text("Add"),
-                        textColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100.0),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.redAccent, // text color
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100.0),
+                          ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

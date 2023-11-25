@@ -6,6 +6,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'Agenda.dart';
 import 'AppBar.dart';
 import 'firebase_options.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 class SplashScreenApp extends StatelessWidget {
@@ -31,15 +32,15 @@ class _HomeViewState extends State<HomeView> {
     Timer(
         Duration(seconds: 2),
         () => Navigator.push(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (_, __, ___) => OtherScreen(),
-            transitionDuration: Duration(seconds: 1),
-            transitionsBuilder: (_, animation, __, child) {
-              return FadeTransition(opacity: animation, child: child);
-            },
-          ),
-        ));
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => OtherScreen(),
+                transitionDuration: Duration(seconds: 1),
+                transitionsBuilder: (_, animation, __, child) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+              ),
+            ));
   }
 
   @override
@@ -51,13 +52,12 @@ class _HomeViewState extends State<HomeView> {
             height: MediaQuery.of(context).size.height,
             child: Stack(children: <Widget>[
               Positioned(
-                bottom: 0,
-                right: 0,
-                child: Opacity(
-                  opacity: 0.25,
-                  child: Image.asset("assets/check.png", height: 200),
-                )
-              ),
+                  bottom: 0,
+                  right: 0,
+                  child: Opacity(
+                    opacity: 0.25,
+                    child: Image.asset("assets/check.png", height: 200),
+                  )),
               Column(children: <Widget>[
                 Padding(
                     padding: const EdgeInsets.only(
@@ -110,6 +110,13 @@ class MyApp extends StatelessWidget {
       ),
       home:
           const MyHomePage(title: ''), // Define a página inicial do aplicativo
+      supportedLocales: [Locale('pt', 'BR')], // Include Portuguese (Brazil)
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations
+            .delegate, // Important for iOS style widgets
+      ],
     );
   }
 }
@@ -231,7 +238,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     // Atualiza o controlador de data
     void _updateDateField(DateTime selectedDate) {
       dateController.text =
-      "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+          "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
     }
 
     // Atualiza o controlador de hora
@@ -269,7 +276,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         String subject, String date, String time, String description) async {
       try {
         CollectionReference appointments =
-        FirebaseFirestore.instance.collection('Appointments');
+            FirebaseFirestore.instance.collection('Appointments');
 
         await appointments.add({
           'subject': subject,
@@ -368,14 +375,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       },
     );
   }
-
-
-
 }
-
-
-
-
 
 class CustomSwitch extends StatefulWidget {
   const CustomSwitch({super.key});
@@ -432,84 +432,83 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: const Color.fromRGBO(1, 169, 94, 1),
-      child: Column(children: <Widget>[
-        Align(
-          alignment: Alignment.center,
-          child: ListTile(
-            contentPadding: const EdgeInsets.fromLTRB(10, 34, 10, 0),
-            leading: const Icon(Icons.menu, size: 40),
+      child: Column(
+        children: <Widget>[
+          Align(
+            alignment: Alignment.center,
+            child: ListTile(
+              contentPadding: const EdgeInsets.fromLTRB(10, 34, 10, 0),
+              leading: const Icon(Icons.menu, size: 45),
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              trailing: SizedBox(
+                width: 110.0,
+                height: 120.0,
+                child: Image.asset("assets/done_logo_white.png"),
+              ),
+            ),
+          ),
+          SizedBox(height: 30), // Added SizedBox for padding
+          ListTile(
+            leading: const Icon(
+              Icons.calendar_month_outlined,
+              color: Colors.white,
+              size: 33,
+            ),
+            title: const Text("Agenda",
+                style: TextStyle(
+                    fontFamily: 'Roboto', color: Colors.white, fontSize: 22)),
             onTap: () {
               Navigator.of(context).pop();
+              tabController.animateTo(0);
             },
-            trailing: SizedBox(
-                width: 120.0,
-                height: 120.0,
-                child: Image.asset("assets/done_logo_white.png")),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-          child: Column(children: <Widget>[
-            ListTile(
-              leading: const Icon(
-                Icons.calendar_month_outlined,
-                color: Colors.white,
-                size: 30,
+          ListTile(
+            leading: const Icon(Icons.task_alt, color: Colors.white, size: 33),
+            title: const Text("Tarefas",
+                style: TextStyle(
+                    fontFamily: 'Roboto', color: Colors.white, fontSize: 22)),
+            onTap: () {
+              Navigator.of(context).pop();
+              tabController.animateTo(1);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.bar_chart_outlined,
+                color: Colors.white, size: 33),
+            title: const Text("Métricas",
+                style: TextStyle(
+                    fontFamily: 'Roboto', color: Colors.white, fontSize: 22)),
+            onTap: () {
+              Navigator.of(context).pop();
+              tabController.animateTo(2);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.share, color: Colors.white, size: 33),
+            title: const Text("Compartilhar",
+                style: TextStyle(
+                    fontFamily: 'Roboto', color: Colors.white, fontSize: 22)),
+            onTap: () {
+              Navigator.of(context).pop();
+              tabController.animateTo(3);
+            },
+          ),
+          // Use another flexible space below the menu items to keep them centered.
+          Spacer(),
+          // This will be pushed to the bottom by the Spacers.
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom,
               ),
-              title: const Text("Agenda",
-                  style: TextStyle(
-                      fontFamily: 'Roboto', color: Colors.white, fontSize: 18)),
-              onTap: () {
-                Navigator.of(context).pop();
-                tabController.animateTo(0);
-              },
+              child: const CustomSwitch(),
             ),
-            ListTile(
-              leading:
-                  const Icon(Icons.task_alt, color: Colors.white, size: 30),
-              title: const Text("Tarefas",
-                  style: TextStyle(
-                      fontFamily: 'Roboto', color: Colors.white, fontSize: 18)),
-              onTap: () {
-                Navigator.of(context).pop();
-                tabController.animateTo(1);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.bar_chart_outlined,
-                  color: Colors.white, size: 30),
-              title: const Text("Métricas",
-                  style: TextStyle(
-                      fontFamily: 'Roboto', color: Colors.white, fontSize: 18)),
-              onTap: () {
-                Navigator.of(context).pop();
-                tabController.animateTo(2);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.share, color: Colors.white, size: 30),
-              title: const Text("Compartilhar",
-                  style: TextStyle(
-                      fontFamily: 'Roboto', color: Colors.white, fontSize: 18)),
-              onTap: () {
-                Navigator.of(context).pop();
-                tabController.animateTo(3);
-              },
-            ),
-          ]),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(
-              0, MediaQuery.of(context).size.height * .5, 0, 10),
-          child: const CustomSwitch(),
-        ),
-      ]),
+          ),
+        ],
+      ),
     );
   }
 }
-
-
-
-
-
-

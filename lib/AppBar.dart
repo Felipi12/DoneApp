@@ -19,12 +19,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: Padding(
         padding: EdgeInsets.only(left: 10),
         child: SizedBox(
-            height: 200,
-            child: Ink.image(
-                fit: BoxFit.contain, //
-                image: AssetImage('assets/avatar.png'),
-              ),
-            ),
+          height: 200,
+          child: Ink.image(
+            fit: BoxFit.contain, //
+            image: AssetImage('assets/avatar.png'),
+          ),
+        ),
       ),
       toolbarHeight: 70,
       title: Center(
@@ -49,5 +49,3 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
   }
 }
-
-
