@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyAX03iMShuKnVw_9AB0iB0DRWwgO2fiy4w</string>
+	<key>GCM_SENDER_ID</key>
+	<string>747727448669</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.cefet.doneapp</string>
+	<key>PROJECT_ID</key>
+	<string>done-app-b0985</string>
+	<key>STORAGE_BUCKET</key>
+	<string>done-app-b0985.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:747727448669:ios:4a933019dfe3a1053a3bb4</string>
+</dict>
+</plist>
