@@ -11,9 +11,11 @@ class TabViewItem_1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SfCalendar(
+      selectionDecoration: BoxDecoration(color:Colors.grey[100]),
+      todayHighlightColor: Color.fromRGBO(1, 169, 94, 1),
       viewHeaderStyle:
           ViewHeaderStyle(dateTextStyle: TextStyle(fontFamily: 'Roboto')),
-      todayTextStyle: TextStyle(fontFamily: 'RedHatDisplay'),
+      todayTextStyle: TextStyle(fontFamily: 'Roboto'),
       appointmentTextStyle:
           TextStyle(color: Colors.white, fontFamily: 'Roboto'),
       showNavigationArrow: true,
@@ -21,11 +23,6 @@ class TabViewItem_1 extends StatelessWidget {
       headerStyle:
           CalendarHeaderStyle(textStyle: TextStyle(fontFamily: 'Roboto')),
       view: CalendarView.week,
-      showWeekNumber: true,
-      weekNumberStyle: const WeekNumberStyle(
-        backgroundColor: Color.fromRGBO(1, 169, 94, 1),
-        textStyle: TextStyle(color: Colors.black, fontSize: 11),
-      ),
       allowedViews: const [
         CalendarView.day,
         CalendarView.week,
@@ -53,6 +50,7 @@ class TabViewItem_1 extends StatelessWidget {
   }
 }
 
+// MOCK DE DADOS
 class CalendarDataSourceUtility {
   static DataSource getCalendarDataSource() {
     final List<Appointment> appointments = <Appointment>[];
@@ -78,7 +76,7 @@ class CalendarDataSourceUtility {
       startTime: DateTime(2023, 11, 24, 3, 0, 0),
       endTime: DateTime(2023, 11, 24, 4, 0, 0),
       subject: 'Retrospective',
-      color: Colors.purple,
+      color: Color.fromRGBO(1, 169, 94, 0.5),
     ));
 
     return DataSource(appointments);

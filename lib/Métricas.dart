@@ -17,10 +17,32 @@ class MetricsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Tarefas concluídas'), centerTitle: true),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+
+            Align(alignment: Alignment.topLeft, child:Padding(
+              padding: const EdgeInsets.only(top: 16.0, left:30),
+              child: Text(
+                'Tarefas Concluídas', // The title text
+                style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 20,
+                    fontFamily: 'Roboto'
+                ),
+              ),
+            ),),
+        Align(alignment: Alignment.topLeft, child:Padding(
+          padding: const EdgeInsets.only(left:30),
+          child: Text(
+            'Última semana', // The subtitle text
+            style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+                fontFamily: 'Roboto'
+            ),),
+
+        ),),
             BarChartWidget(barChartData: barChartData),
             SizedBox(height: 5),
             PieChartWidget(),
@@ -45,10 +67,9 @@ class BarChartWidget extends StatelessWidget {
           barRods: [
             BarChartRodData(
               toY: barChartData[index].toDouble(),
-              color: Colors.green, // Set the color to green
+              color: Color.fromRGBO(1, 169, 94, 1), // Set the color to green
               width: 28,
-              borderSide: BorderSide(color: Colors.black, width: 0),
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(2),
             ),
           ],
         );
@@ -63,11 +84,11 @@ class BarChartWidget extends StatelessWidget {
           EdgeInsets.fromLTRB(16.0, 12.0, 25.0, 0), // Increased left padding
       child: BarChart(
         BarChartData(
-          alignment: BarChartAlignment.spaceAround,
+          alignment: BarChartAlignment.spaceEvenly,
           maxY: maxY, // Use the calculated maxY
           barTouchData: BarTouchData(
             touchTooltipData: BarTouchTooltipData(
-              tooltipBgColor: Colors.grey,
+              tooltipBgColor: Colors.white,
             ),
           ),
           titlesData: FlTitlesData(
@@ -90,7 +111,7 @@ class BarChartWidget extends StatelessWidget {
                     axisSide: meta.axisSide,
                     space: 8.0,
                     child: Text(daysOfWeek[value.toInt()],
-                        style: TextStyle(color: Colors.black, fontSize: 10)),
+                        style: TextStyle(color: Colors.grey, fontSize: 10)),
                   );
                 },
               ),
@@ -104,7 +125,7 @@ class BarChartWidget extends StatelessWidget {
                     space: 8.0,
                     child: Text(
                       value.toInt().toString(),
-                      style: TextStyle(color: Colors.black, fontSize: 11),
+                      style: TextStyle(color: Colors.grey, fontSize: 11),
                     ),
                   );
                 },
@@ -117,7 +138,7 @@ class BarChartWidget extends StatelessWidget {
             topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           ),
           gridData: FlGridData(show: true),
-          borderData: FlBorderData(show: true),
+          borderData: FlBorderData(show: false),
           barGroups: generateBarGroups(),
         ),
       ),
@@ -130,24 +151,27 @@ class PieChartWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 16.0),
+        Align(alignment: Alignment.topLeft, child:Padding(
+          padding: const EdgeInsets.only(top: 16.0, left:30),
           child: Text(
             'Status das tarefas', // The title text
             style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+              color: Colors.grey,
+              fontSize: 20,
+              fontFamily: 'Roboto'
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20.0),
+        ),),
+        Align(alignment: Alignment.topLeft, child:Padding(
+          padding: const EdgeInsets.only(bottom: 20.0, left:30),
           child: Text(
             'Último mês', // The subtitle text
             style: TextStyle(
-              fontSize: 18,
-              color: Colors.grey,
-            ),
+                fontSize: 14,
+                color: Colors.grey,
+                fontFamily: 'Roboto'
+            ),),
+
           ),
         ),
         Container(
@@ -158,8 +182,7 @@ class PieChartWidget extends StatelessWidget {
               centerSpaceRadius: 0,
               sections: [
                 PieChartSectionData(
-                  color:
-                      const Color(0xff029f20), // Green color for 'Concluídas'
+                  color: Color.fromRGBO(1, 169, 94, 1), // Green color for 'Concluídas'
                   value: 40, // Adjust value accordingly
                   title: '40%', // You can include the percentage here
                   radius: 90,
@@ -170,8 +193,7 @@ class PieChartWidget extends StatelessWidget {
                   ),
                 ),
                 PieChartSectionData(
-                  color: Color.fromARGB(
-                      255, 41, 168, 203), // Yellow color for 'Pendentes'
+                  color: Color.fromRGBO(237, 232, 100, 0.41), // Yellow color for 'Pendentes'
                   value: 30, // Adjust value accordingly
                   title: '30%', // You can include the percentage here
                   radius: 90,
@@ -182,14 +204,12 @@ class PieChartWidget extends StatelessWidget {
                   ),
                 ),
                 PieChartSectionData(
-                  color: const Color.fromARGB(
-                      255, 211, 80, 117), // Red color for 'Expiradas'
+                  color: Color.fromRGBO(237, 100, 100, 0.68),// Red color for 'Expiradas'
                   value: 30, // Adjust value accordingly
                   title: '30%', // You can include the percentage here
                   radius: 90,
                   titleStyle: TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
                     color: const Color(0xffffffff),
                   ),
                 ),
@@ -200,25 +220,41 @@ class PieChartWidget extends StatelessWidget {
         ),
         SizedBox(height: 30), // Spacing between chart and subtitles
         // Subtitles
-        Wrap(
-          spacing: 10, // Spacing between chips
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Chip(
-              backgroundColor: const Color(0xff029f20),
-              label: Text('Concluídas', style: TextStyle(color: Colors.white)),
-            ),
-            Chip(
-              backgroundColor: const Color.fromARGB(255, 41, 168, 203),
-              label: Text('Pendentes', style: TextStyle(color: Colors.white)),
-            ),
-            Chip(
-              backgroundColor: Color.fromARGB(255, 211, 80, 117),
-              label: Text('Expiradas', style: TextStyle(color: Colors.white)),
-            ),
-            // Add more chips for more subtitles if needed
+            Row(children:<Widget>[
+              CircleAvatar(
+                radius: 10,
+                backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+              ),
+
+            Padding(padding: EdgeInsets.only(left:5), child:Text('Concluídas', style: TextStyle(color: Colors.grey, fontFamily: 'Roboto'),)),
+            ]),
+            Row(children:<Widget>[
+              CircleAvatar(
+                radius: 10,
+                backgroundColor: Color.fromRGBO(237, 232, 100, 0.41),
+              ),
+              Padding(padding: EdgeInsets.only(left:5), child:Text('Pendentes', style: TextStyle(color: Colors.grey, fontFamily: 'Roboto'),))
+            ]),
+
+            Row(children: <Widget> [
+              CircleAvatar(
+                radius: 10,
+                backgroundColor: Color.fromRGBO(237, 100, 100, 0.68),
+              ),
+              Padding(padding: EdgeInsets.only(left:5), child:Text('Expiradas', style: TextStyle(color: Colors.grey, fontFamily: 'Roboto'),))
+            ]),
           ],
-        ),
+        )
+
+
+
+
+
       ],
     );
   }
 }
+
