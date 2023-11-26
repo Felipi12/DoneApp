@@ -9,7 +9,7 @@ class AppointmentEntity implements EntityInterface {
       required this.date,
       required this.color,
       required this.description,
-      required this.userId});
+      this.userId = ""});
 
   String? id = "";
 
@@ -25,6 +25,7 @@ class AppointmentEntity implements EntityInterface {
 
   String userId;
 
+  @override
   toObject() {
     return {
       'startTime': startTime,

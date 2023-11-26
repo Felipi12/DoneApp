@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doneapp/clients/controllers/authenticator_controller.dart';
 import 'package:doneapp/clients/controllers/base_controller.dart';
 import 'package:doneapp/clients/entities/appointment_entity.dart';
 
@@ -45,7 +46,10 @@ class AppointmentsController extends BaseController {
 
   Future<List<AppointmentEntity>> getAll() async {
     try {
-      QuerySnapshot querySnapshot = await collection.get();
+      QuerySnapshot querySnapshot = await collection
+          .where('userId',
+              isEqualTo: AuthenticatorController.getLoggedUser().id)
+          .get();
       List<AppointmentEntity> allAppointments = querySnapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return AppointmentEntity(
@@ -87,8 +91,12 @@ class AppointmentsController extends BaseController {
 
   Future<AppointmentEntity> create(AppointmentEntity appointment) async {
     try {
+      Map<String, dynamic> appointmentToCreate = appointment.toObject();
+      appointmentToCreate["userId"] =
+          AuthenticatorController.getLoggedUser().id;
+
       DocumentReference appointmentDB =
-          await collection.add(appointment.toObject());
+          await collection.add(appointmentToCreate);
 
       DocumentSnapshot documentSnapshot = await appointmentDB.get();
 
