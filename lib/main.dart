@@ -1,12 +1,92 @@
 // Importa os pacotes necessários
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doneapp/clients/controllers/appointments_controller.dart';
 import 'package:doneapp/clients/entities/appointment_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-
+import 'Agenda.dart';
+import 'Login_Screen.dart';
+import 'Métricas.dart';
+import 'AppBar.dart';
 import 'firebase_options.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+class SplashScreenApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Splash Screen',
+      home: HomeView(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class HomeView extends StatefulWidget {
+  @override
+  _HomeViewState createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(
+        Duration(seconds: 2),
+        () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => OtherScreen(),
+                transitionDuration: Duration(seconds: 1),
+                transitionsBuilder: (_, animation, __, child) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+              ),
+            ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+        body: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Stack(children: <Widget>[
+              Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Opacity(
+                    opacity: 0.25,
+                    child: Image.asset("assets/check.png", height: 200),
+                  )),
+              Column(children: <Widget>[
+                Padding(
+                    padding: const EdgeInsets.only(
+                        bottom: 50, left: 50, right: 50, top: 300),
+                    child: Image.asset("assets/done_logo_white.png")),
+                Padding(
+                    padding: const EdgeInsets.only(
+                        bottom: 50, left: 10, right: 10, top: 30),
+                    child: Text(
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontFamily: 'RedHatDisplay'),
+                        "New Tasks, Job #Done")),
+              ])
+            ])));
+  }
+}
+
+class OtherScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MyApp();
+  }
+}
 
 // Ponto de entrada do aplicativo
 void main() async {
@@ -16,7 +96,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  runApp(SplashScreenApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -28,12 +108,25 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'DoneApp',
       theme: ThemeData(
+        primarySwatch: Colors.green,
+        canvasColor: Colors.green,
+        indicatorColor: Colors.green,
+        primaryColor: Colors.green,
+
+        highlightColor: Color.fromRGBO(1, 169, 94, 1),
         fontFamily: 'RedHatDisplay', // Define a fonte padrão do aplicativo
         iconTheme:
             const IconThemeData(color: Colors.white), // Define o tema do ícone
       ),
       home:
           const MyHomePage(title: ''), // Define a página inicial do aplicativo
+      supportedLocales: [Locale('pt', 'BR')], // Include Portuguese (Brazil)
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations
+            .delegate, // Important for iOS style widgets
+      ],
     );
   }
 }
@@ -77,32 +170,67 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: TabBar(
+        labelColor: Color.fromRGBO(1, 169, 94, 1),
+        labelStyle:
+            TextStyle(fontFamily: 'Roboto', color: Colors.white, fontSize: 12),
+        physics: BouncingScrollPhysics(),
+        unselectedLabelColor: Colors.grey[400],
+        indicator: BoxDecoration(
+            borderRadius: BorderRadius.circular(10), // Creates border
+            color: Colors.grey[200]),
+        controller: _tabController,
+        tabs: const <Widget>[
+          Tab(
+              text: "Agenda",
+              icon: Icon(Icons.calendar_month_outlined,
+                  color: Color.fromRGBO(1, 169, 94, 1))),
+          Tab(
+              text: "Tarefas",
+              icon: Icon(Icons.task_alt_rounded,
+                  color: Color.fromRGBO(1, 169, 94, 1))),
+          Tab(
+              text: "Métricas",
+              icon:
+                  Icon(Icons.bar_chart, color: Color.fromRGBO(1, 169, 94, 1))),
+          Tab(
+              text: "Share",
+              icon: Icon(Icons.share, color: Color.fromRGBO(1, 169, 94, 1))),
+        ],
+      ),
       appBar: CustomAppBar(
           tabController: _tabController, selectedIndex: _selectedIndex),
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          TabViewItem(controller: _controller),
+          TabViewItem_1(controller: _controller),
           const Center(child: Text("Tarefas vem aqui")),
-          const Center(child: Text("Métricas vem aqui")),
+          MetricsTab(),
           const Center(child: Text("Compartilhar vem aqui")),
         ],
       ),
       endDrawer: CustomDrawer(tabController: _tabController),
-      floatingActionButton:
-          _tabController.index == 0 || _tabController.index == 1
-              ? Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: FloatingActionButton(
-                      onPressed: _showAddAppointmentDialog,
-                      backgroundColor: Colors.green,
-                      child: const Icon(Icons.add),
-                    ),
-                  ),
-                )
-              : null,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 50.0),
+        child: Align(
+            alignment: Alignment.bottomCenter,
+            child: AnimatedOpacity(
+              // If the widget is visible, animate to 0.0 (invisible).
+              // If the widget is hidden, animate to 1.0 (fully visible).
+              opacity: _tabController.index <= 1 ? 1.0 : 0.0,
+              duration: Duration(milliseconds: 300),
+              // The green box must be a child of the AnimatedOpacity widget.
+              child: FloatingActionButton(
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                tooltip: "Adicionar",
+                onPressed: _showAddAppointmentDialog,
+                backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+                child: const Icon(Icons.add, color: Colors.white,),
+              ),
+            )),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
@@ -115,7 +243,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     DateTime? selectedDate = DateTime.now();
     TimeOfDay? selectedTime = TimeOfDay.now();
     List<String> repeatDays = [];
-    Color selectedColor = Colors.blue;
+    Color selectedColor =Color.fromRGBO(255, 234, 142, 1.0);
 
     // Atualiza o controlador de data
     void _updateDateField(DateTime selectedDate) {
@@ -131,6 +259,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     // Função para escolher e atualizar a data
     Future<void> _selectDate(BuildContext context) async {
       final DateTime? picked = await showDatePicker(
+        barrierColor: Color.fromRGBO(0, 0, 0, 0.3),
         context: context,
         initialDate: selectedDate!,
         firstDate: DateTime(2000),
@@ -160,52 +289,64 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       barrierDismissible: false, // Usuário deve tocar no botão para fechar
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Novo Compromisso'),
+          title: const Text('Novo Compromisso',
+              style: TextStyle(fontFamily: 'Roboto', fontSize: 18)),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 TextFormField(
+                  style: TextStyle(fontFamily: 'Roboto'),
                   controller: subjectController,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.subject),
                     labelText: 'Assunto',
+                    labelStyle: TextStyle(fontFamily: 'Roboto'),
                   ),
                 ),
                 TextFormField(
+                  style: TextStyle(fontFamily: 'Roboto'),
                   controller: dateController,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.calendar_today),
                     labelText: 'Data',
+                    labelStyle: TextStyle(fontFamily: 'Roboto'),
                   ),
                   onTap: () => _selectDate(context),
                   readOnly: true,
                 ),
                 TextFormField(
+                  style: TextStyle(fontFamily: 'Roboto'),
                   controller: timeController,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.access_time),
                     labelText: 'Hora',
+                    labelStyle: TextStyle(fontFamily: 'Roboto'),
                   ),
                   onTap: () => _selectTime(context),
                   readOnly: true,
                 ),
                 // TODO: Aqui você adicionaria widgets para seleção de dias de repetição
-                TextField(
+                Padding(padding: EdgeInsets.only(top:20), child:TextField(
+                  style: TextStyle(fontFamily: 'Roboto'),
                   controller: descriptionController,
                   decoration: const InputDecoration(
                     labelText: 'Descrição',
+                    labelStyle: TextStyle(fontFamily: 'Roboto'),
                     border: OutlineInputBorder(),
                   ),
                   maxLines: 3,
-                ),
+                ),),
                 // TODO: Aqui você adicionaria o seletor de cor
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('CANCELAR'),
+              child: const Text(
+                'CANCELAR',
+                style: TextStyle(color: Colors.red, fontFamily: 'Roboto'),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -222,91 +363,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         );
       },
     );
-  }
-}
-
-// Constrói o Appbar/Navbar
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final TabController tabController;
-  final int selectedIndex;
-
-  const CustomAppBar(
-      {super.key, required this.tabController, required this.selectedIndex});
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 30);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      bottom: TabBar(
-        controller: tabController,
-        tabs: const <Widget>[
-          Tab(icon: Icon(Icons.calendar_month_outlined)),
-          Tab(icon: Icon(Icons.task_alt_rounded)),
-          Tab(icon: Icon(Icons.bar_chart)),
-          Tab(icon: Icon(Icons.share)),
-        ],
-      ),
-      backgroundColor: const Color.fromRGBO(1, 169, 94, 1),
-      leading: Image.asset('assets/avatar.png'),
-      toolbarHeight: 70,
-      title: Center(
-        child: Text(_getTitleBasedOnTab(selectedIndex)),
-      ),
-      iconTheme: const IconThemeData(color: Colors.white, size: 40),
-    );
-  }
-
-  String _getTitleBasedOnTab(int index) {
-    switch (index) {
-      case 0:
-        return 'Agenda';
-      case 1:
-        return 'Tarefas';
-      case 2:
-        return 'Métricas';
-      case 3:
-        return 'Compartilhar';
-      default:
-        return '';
-    }
-  }
-}
-
-// Constrói o calendário da tela de Agenda
-class TabViewItem extends StatelessWidget {
-  final CalendarController controller;
-
-  const TabViewItem({super.key, required this.controller});
-
-  @override
-  Widget build(BuildContext context) {
-    return SfCalendar(
-      view: CalendarView.day,
-      allowedViews: const [
-        CalendarView.day,
-        CalendarView.week,
-        CalendarView.month,
-      ],
-      controller: controller,
-      initialDisplayDate: DateTime.now(),
-      dataSource: CalendarDataSourceUtility.getCalendarDataSource(),
-      onTap: calendarTapped,
-      monthViewSettings: const MonthViewSettings(
-          navigationDirection: MonthNavigationDirection.vertical),
-    );
-  }
-
-  void calendarTapped(CalendarTapDetails calendarTapDetails) {
-    if (controller.view == CalendarView.month &&
-        calendarTapDetails.targetElement == CalendarElement.calendarCell) {
-      controller.view = CalendarView.day;
-    } else if ((controller.view == CalendarView.week ||
-            controller.view == CalendarView.workWeek) &&
-        calendarTapDetails.targetElement == CalendarElement.viewHeader) {
-      controller.view = CalendarView.day;
-    }
   }
 }
 
@@ -327,6 +383,10 @@ class CustomSwitchState extends State<CustomSwitch> {
         clipBehavior: Clip.none,
         children: <Widget>[
           Switch(
+            activeTrackColor: Colors.grey,
+            inactiveThumbColor: Colors.white,
+            inactiveTrackColor: Colors.grey[350],
+            activeColor: Colors.white,
             value: _isSwitched,
             onChanged: (value) {
               setState(() {
@@ -335,7 +395,7 @@ class CustomSwitchState extends State<CustomSwitch> {
             },
           ),
           Positioned(
-            top: -10,
+            top: -20,
             left: 18,
             child: Icon(
                 _isSwitched
@@ -349,7 +409,7 @@ class CustomSwitchState extends State<CustomSwitch> {
       leading: const Icon(
         Icons.format_size,
         color: Colors.white,
-        size: 50,
+        size: 40,
       ),
     );
   }
@@ -365,125 +425,83 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: const Color.fromRGBO(1, 169, 94, 1),
-      child: Column(children: <Widget>[
-        Align(
-          alignment: Alignment.center,
-          child: ListTile(
-            contentPadding: const EdgeInsets.fromLTRB(10, 34, 10, 0),
-            leading: const Icon(Icons.menu, size: 40),
+      child: Column(
+        children: <Widget>[
+          Align(
+            alignment: Alignment.center,
+            child: ListTile(
+              contentPadding: const EdgeInsets.fromLTRB(10, 34, 10, 0),
+              leading: const Icon(Icons.menu, size: 45),
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              trailing: SizedBox(
+                width: 110.0,
+                height: 120.0,
+                child: Image.asset("assets/done_logo_white.png"),
+              ),
+            ),
+          ),
+          SizedBox(height: 60), // Added SizedBox for padding
+          ListTile(
+            leading: const Icon(
+              Icons.calendar_month_outlined,
+              color: Colors.white,
+              size: 32,
+            ),
+            title: const Text("Agenda",
+                style: TextStyle(
+                    fontFamily: 'Roboto', color: Colors.white, fontSize: 16)),
             onTap: () {
               Navigator.of(context).pop();
+              tabController.animateTo(0);
             },
-            trailing: SizedBox(
-                width: 120.0,
-                height: 120.0,
-                child: Image.asset("assets/done_logo_white.png")),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-          child: Column(children: <Widget>[
-            ListTile(
-              leading: const Icon(
-                Icons.calendar_month_outlined,
-                color: Colors.white,
-                size: 30,
+          ListTile(
+            leading: const Icon(Icons.task_alt, color: Colors.white, size: 32),
+            title: const Text("Tarefas",
+                style: TextStyle(
+                    fontFamily: 'Roboto', color: Colors.white, fontSize: 16)),
+            onTap: () {
+              Navigator.of(context).pop();
+              tabController.animateTo(1);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.bar_chart_outlined,
+                color: Colors.white, size: 32),
+            title: const Text("Métricas",
+                style: TextStyle(
+                    fontFamily: 'Roboto', color: Colors.white, fontSize: 16)),
+            onTap: () {
+              Navigator.of(context).pop();
+              tabController.animateTo(2);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.share, color: Colors.white, size: 32),
+            title: const Text("Compartilhar",
+                style: TextStyle(
+                    fontFamily: 'Roboto', color: Colors.white, fontSize: 16)),
+            onTap: () {
+              Navigator.of(context).pop();
+              tabController.animateTo(3);
+            },
+          ),
+          // Use another flexible space below the menu items to keep them centered.
+          Spacer(),
+          // This will be pushed to the bottom by the Spacers.
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: 15,
               ),
-              title: const Text("Agenda",
-                  style: TextStyle(
-                      fontFamily: 'Roboto', color: Colors.white, fontSize: 20)),
-              onTap: () {
-                Navigator.of(context).pop();
-                tabController.animateTo(0);
-              },
+              child: const CustomSwitch(),
             ),
-            ListTile(
-              leading:
-                  const Icon(Icons.task_alt, color: Colors.white, size: 30),
-              title: const Text("Tarefas",
-                  style: TextStyle(
-                      fontFamily: 'Roboto', color: Colors.white, fontSize: 20)),
-              onTap: () {
-                Navigator.of(context).pop();
-                tabController.animateTo(1);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.bar_chart_outlined,
-                  color: Colors.white, size: 30),
-              title: const Text("Métricas",
-                  style: TextStyle(
-                      fontFamily: 'Roboto', color: Colors.white, fontSize: 20)),
-              onTap: () {
-                Navigator.of(context).pop();
-                tabController.animateTo(2);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.share, color: Colors.white, size: 30),
-              title: const Text("Compartilhar",
-                  style: TextStyle(
-                      fontFamily: 'Roboto', color: Colors.white, fontSize: 20)),
-              onTap: () {
-                Navigator.of(context).pop();
-                tabController.animateTo(3);
-              },
-            ),
-          ]),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(
-              0, MediaQuery.of(context).size.height * .45, 0, 10),
-          child: const CustomSwitch(),
-        ),
-      ]),
+          ),
+        ],
+      ),
     );
   }
-}
-
-class CalendarDataSourceUtility {
-  static DataSource getCalendarDataSource() {
-    final List<Appointment> appointments = <Appointment>[];
-    appointments.add(Appointment(
-      startTime: DateTime.now(),
-      endTime: DateTime.now().add(const Duration(hours: 1)),
-      subject: 'Meeting',
-      color: Colors.pink,
-    ));
-    appointments.add(Appointment(
-      startTime: DateTime.now().add(const Duration(hours: 4)),
-      endTime: DateTime.now().add(const Duration(hours: 5)),
-      subject: 'Release Meeting',
-      color: Colors.lightBlueAccent,
-    ));
-    appointments.add(Appointment(
-      startTime: DateTime.now().add(const Duration(hours: 6)),
-      endTime: DateTime.now().add(const Duration(hours: 7)),
-      subject: 'Performance check',
-      color: Colors.amber,
-    ));
-    appointments.add(Appointment(
-      startTime: DateTime(2023, 11, 22, 1, 0, 0),
-      endTime: DateTime(2023, 11, 22, 3, 0, 0),
-      subject: 'Support',
-      color: Colors.green,
-    ));
-    appointments.add(Appointment(
-      startTime: DateTime(2023, 11, 24, 3, 0, 0),
-      endTime: DateTime(2023, 11, 24, 4, 0, 0),
-      subject: 'Retrospective',
-      color: Colors.purple,
-    ));
-
-    return DataSource(appointments);
-  }
-}
-
-class DataSource extends CalendarDataSource {
-  DataSource(this.source);
-
-  List<Appointment> source;
-
-  @override
-  List<dynamic> get appointments => source;
 }
