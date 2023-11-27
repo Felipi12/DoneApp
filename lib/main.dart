@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'Agenda.dart';
+import 'LoginScreen.dart';
 import 'Profile_Screen.dart';
 import 'Métricas.dart';
 import 'AppBar.dart';
@@ -14,10 +15,44 @@ import 'firebase_options.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+ThemeData darkTheme = ThemeData(
+  brightness: Brightness.dark,
+  primaryColor: Colors.green[900],
+  scaffoldBackgroundColor: Colors.black,
+  textTheme: TextTheme(
+    bodyText1: TextStyle(color: Colors.white),
+    bodyText2: TextStyle(color: Colors.white),
+  ),
+  iconTheme: IconThemeData(
+    color: Colors.green[900],
+  ),
+);
+
+ThemeData lightTheme = ThemeData(
+  brightness: Brightness.light,
+  primaryColor: Colors.green,
+  scaffoldBackgroundColor: Colors.white,
+  textTheme: TextTheme(
+    bodyText1: TextStyle(color: Colors.white),
+    bodyText2: TextStyle(color: Colors.white),
+  ),
+  iconTheme: IconThemeData(
+    color: Colors.green,
+  ),
+);
+
 class SplashScreenApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: Color.fromRGBO(60, 103, 61, 1),
+        scaffoldBackgroundColor: Colors.black,
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+        ),
+      ),
       title: 'Splash Screen',
       home: HomeView(),
       debugShowCheckedModeBanner: false,
@@ -39,7 +74,7 @@ class _HomeViewState extends State<HomeView> {
         () => Navigator.push(
               context,
               PageRouteBuilder(
-                pageBuilder: (_, __, ___) => OtherScreen(),
+                pageBuilder: (_, __, ___) => LoginScreen(),
                 transitionDuration: Duration(seconds: 1),
                 transitionsBuilder: (_, animation, __, child) {
                   return FadeTransition(opacity: animation, child: child);

@@ -18,6 +18,10 @@ class _ToDoListState extends State<ToDoList> {
   List<DateTime> currentMonthList = List.empty();
   DateTime currentDateTime = DateTime.now();
   late ScrollController scrollController;
+  final size=2;
+
+  //List<List<int>> grid = List<List<int>>.generate(
+    //  this.size, (i) => List<int>.generate(this.size, (j) => i * this.size + j));
 
   List _toDoList = [];
   late Map<String, dynamic> _lastRemoved;
