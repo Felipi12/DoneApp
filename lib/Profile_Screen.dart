@@ -22,7 +22,9 @@ class ProfileScreen extends StatelessWidget {
           toolbarHeight: 70,
           title: Padding(
               padding: EdgeInsets.only(left: 95),
-              child: Text('Perfil', style: TextStyle(color: Colors.white, fontFamily: 'RedHatDisplay'))),
+              child: Text('Perfil',
+                  style: TextStyle(
+                      color: Colors.white, fontFamily: 'RedHatDisplay'))),
           iconTheme: const IconThemeData(color: Colors.white, size: 40),
         ),
         body: Column(
@@ -49,19 +51,26 @@ class ProfileScreen extends StatelessWidget {
                   padding: EdgeInsets.only(top: 30),
                   child: Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.5,
+                      height: 220,
                       child: Column(
                         children: [Image.asset('assets/avatar.png')],
                       )),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('felipe_USERNAME'),
-                  ],
                 )
               ],
             ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('_USERNAME', style: TextStyle(fontSize: 24,color: Color.fromRGBO(1, 169, 94, 1)),),
+                Padding(
+                  padding: EdgeInsets.only(top:40,left: 40, right: 40),
+                  child: Divider(
+                    color: Color.fromRGBO(1, 169, 94, 1),
+                    thickness: 1.5,
+                  ),
+                ),
+              ],
+            )
           ],
         ));
   }

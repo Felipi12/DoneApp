@@ -23,7 +23,7 @@ class MetricsTab extends StatelessWidget {
             Align(
               alignment: Alignment.topLeft,
               child: Padding(
-                padding: const EdgeInsets.only(top: 16.0, left: 30),
+                padding: const EdgeInsets.only(top: 25.0, left: 30),
                 child: Text(
                   'Tarefas Concluídas', // The title text
                   style: TextStyle(
@@ -219,7 +219,7 @@ class PieChartWidget extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 30), // Spacing between chart and subtitles
+        SizedBox(height: 50), // Spacing between chart and subtitles
         // Subtitles
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

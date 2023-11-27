@@ -6,12 +6,14 @@ class ShareScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      resizeToAvoidBottomInset: false,
+      body: SingleChildScrollView(
+        child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           child: Stack(children: <Widget>[
             Positioned(
-                bottom: 0,
+                bottom: 180,
                 right: -50,
                 child: Opacity(
                   opacity: 0.2,
@@ -45,12 +47,11 @@ class ShareScreen extends StatelessWidget {
                           borderSide: BorderSide(
                               color: Color.fromRGBO(1, 169, 94, 1), width: 1.0),
                         ),
-                        focusColor: Colors.pink,
                         labelText: 'Digite aqui a sua mensagem',
                         labelStyle: TextStyle(fontFamily: 'Roboto'),
                         border: OutlineInputBorder(),
                       ),
-                      maxLines: 3,
+                      maxLines: 8,
                     ),
                   ),
                   elevation: 3,
@@ -73,25 +74,25 @@ class ShareScreen extends StatelessWidget {
               ),
               Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.only(top: 40, bottom: 20),
-                        child: Image.asset(
-                          'assets/x.png',
-                          height: 60,
-                        )),
-                    Padding(
-                        padding: EdgeInsets.only(top: 20, bottom: 20),
-                        child: Image.asset(
-                          'assets/face.png',
-                          height: 60,
-                        ))
-                  ],
-                )
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.only(top: 40, bottom: 20),
+                          child: Image.asset(
+                            'assets/x.png',
+                            height: 60,
+                          )),
+                      Padding(
+                          padding: EdgeInsets.only(top: 40, bottom: 20),
+                          child: Image.asset(
+                            'assets/face.png',
+                            height: 60,
+                          ))
+                    ],
+                  )
               ])
             ]))
-          ])),
+          ]))),
     );
   }
 }
