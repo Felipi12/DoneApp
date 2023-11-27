@@ -1,5 +1,5 @@
 // Importa os pacotes necessários
-import 'dart:async';
+import 'LoginScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doneapp/main.dart';
 import 'package:flutter/material.dart';
@@ -139,7 +139,17 @@ class ProfileScreen extends StatelessWidget {
                       padding: EdgeInsets.only(top: 30),
                       width: 150,
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () => Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (_, __, ___) => LoginScreen(),
+                            transitionDuration: Duration(milliseconds: 50),
+                            transitionsBuilder: (_, animation, __, child) {
+                              return FadeTransition(
+                                  opacity: animation, child: child);
+                            },
+                          ),
+                        ),
                         style: TextButton.styleFrom(
                             backgroundColor: Color.fromRGBO(1, 169, 94, 1)),
                         child: Text(

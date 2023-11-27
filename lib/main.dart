@@ -30,14 +30,14 @@ ThemeData darkTheme = ThemeData(
 
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
-  primaryColor: Colors.green,
+  primaryColor: Color.fromRGBO(1, 169, 94, 1),
   scaffoldBackgroundColor: Colors.white,
   textTheme: TextTheme(
     bodyText1: TextStyle(color: Colors.white),
     bodyText2: TextStyle(color: Colors.white),
   ),
   iconTheme: IconThemeData(
-    color: Colors.green,
+    color: Color.fromRGBO(1, 169, 94, 1),
   ),
 );
 
@@ -201,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: TabBar(
-        indicatorColor: Colors.green,
+        indicatorColor: Color.fromRGBO(1, 169, 94, 1),
         labelColor: Color.fromRGBO(1, 169, 94, 1),
         labelStyle:
             TextStyle(fontFamily: 'Roboto', color: Colors.white, fontSize: 12),
