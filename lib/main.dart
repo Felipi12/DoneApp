@@ -1,7 +1,9 @@
 // Importa os pacotes necessários
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doneapp/toDo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'Agenda.dart';
 import 'Login_Screen.dart';
@@ -106,13 +108,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'DoneApp',
       theme: ThemeData(
-        primarySwatch: Colors.green,
-        canvasColor: Colors.green,
-        indicatorColor: Colors.green,
-        primaryColor: Colors.green,
 
-        highlightColor: Color.fromRGBO(1, 169, 94, 1),
-        fontFamily: 'RedHatDisplay', // Define a fonte padrão do aplicativo
+        // Define a fonte padrão do aplicativo
         iconTheme:
             const IconThemeData(color: Colors.white), // Define o tema do ícone
       ),
@@ -169,14 +166,16 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: TabBar(
+        indicatorColor: Colors.green,
         labelColor: Color.fromRGBO(1, 169, 94, 1),
         labelStyle:
             TextStyle(fontFamily: 'Roboto', color: Colors.white, fontSize: 12),
         physics: BouncingScrollPhysics(),
         unselectedLabelColor: Colors.grey[400],
-        indicator: BoxDecoration(
-            borderRadius: BorderRadius.circular(10), // Creates border
-            color: Colors.grey[200]),
+        overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicator: BoxDecoration(borderRadius: BorderRadius.circular(20),// Creates border
+            color: Colors.grey[100]),
         controller: _tabController,
         tabs: const <Widget>[
           Tab(
@@ -202,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         controller: _tabController,
         children: <Widget>[
           TabViewItem_1(controller: _controller),
-          const Center(child: Text("Tarefas vem aqui")),
+          ToDoList(),
           MetricsTab(),
           const Center(child: Text("Compartilhar vem aqui")),
         ],
@@ -212,20 +211,36 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         padding: const EdgeInsets.only(bottom: 50.0),
         child: Align(
             alignment: Alignment.bottomCenter,
-            child: AnimatedOpacity(
+            child: _tabController.index == 0 ? AnimatedOpacity(
               // If the widget is visible, animate to 0.0 (invisible).
               // If the widget is hidden, animate to 1.0 (fully visible).
-              opacity: _tabController.index <= 1 ? 1.0 : 0.0,
-              duration: Duration(milliseconds: 300),
+              opacity: _tabController.index < 1 ? 1.0 : 0.0,
+              duration: Duration(milliseconds: 200),
               // The green box must be a child of the AnimatedOpacity widget.
               child: FloatingActionButton(
                 elevation: 0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
                 tooltip: "Adicionar",
                 onPressed: _showAddAppointmentDialog,
                 backgroundColor: Color.fromRGBO(1, 169, 94, 1),
-                child: const Icon(Icons.add, color: Colors.white,),
+                child: const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
+              ),
+            ) :
+            AnimatedOpacity(
+              opacity: _tabController.index == 1 ? 1.0 : 0.0,
+              duration: Duration(milliseconds: 200),
+              // The green box must be a child of the AnimatedOpacity widget.
+              child: FloatingActionButton(
+                elevation: 0,
+                tooltip: "Adicionar",
+                onPressed: _showAddAppointmentDialog,
+                backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+                child: const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
               ),
             )),
       ),
@@ -241,7 +256,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     DateTime? selectedDate = DateTime.now();
     TimeOfDay? selectedTime = TimeOfDay.now();
     List<String> repeatDays = [];
-    Color selectedColor =Color.fromRGBO(255, 234, 142, 1.0);
+    Color selectedColor = Color.fromRGBO(255, 234, 142, 1.0);
 
     // Atualiza o controlador de data
     void _updateDateField(DateTime selectedDate) {
@@ -257,7 +272,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     // Função para escolher e atualizar a data
     Future<void> _selectDate(BuildContext context) async {
       final DateTime? picked = await showDatePicker(
-        barrierColor: Color.fromRGBO(0, 0, 0, 0.3),
+        barrierColor: Color.fromRGBO(0, 0, 0, 0.25),
         context: context,
         initialDate: selectedDate!,
         firstDate: DateTime(2000),
@@ -306,6 +321,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       barrierDismissible: false, // Usuário deve tocar no botão para fechar
       builder: (BuildContext context) {
         return AlertDialog(
+
           title: const Text('Novo Compromisso',
               style: TextStyle(fontFamily: 'Roboto', fontSize: 18)),
           content: SingleChildScrollView(
@@ -344,16 +360,19 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   readOnly: true,
                 ),
                 // TODO: Aqui você adicionaria widgets para seleção de dias de repetição
-                Padding(padding: EdgeInsets.only(top:20), child:TextField(
-                  style: TextStyle(fontFamily: 'Roboto'),
-                  controller: descriptionController,
-                  decoration: const InputDecoration(
-                    labelText: 'Descrição',
-                    labelStyle: TextStyle(fontFamily: 'Roboto'),
-                    border: OutlineInputBorder(),
+                Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: TextField(
+                    style: TextStyle(fontFamily: 'Roboto'),
+                    controller: descriptionController,
+                    decoration: const InputDecoration(
+                      labelText: 'Descrição',
+                      labelStyle: TextStyle(fontFamily: 'Roboto'),
+                      border: OutlineInputBorder(),
+                    ),
+                    maxLines: 3,
                   ),
-                  maxLines: 3,
-                ),),
+                ),
                 // TODO: Aqui você adicionaria o seletor de cor
               ],
             ),

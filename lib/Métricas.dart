@@ -20,29 +20,28 @@ class MetricsTab extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-
-            Align(alignment: Alignment.topLeft, child:Padding(
-              padding: const EdgeInsets.only(top: 16.0, left:30),
-              child: Text(
-                'Tarefas Concluídas', // The title text
-                style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 20,
-                    fontFamily: 'Roboto'
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16.0, left: 30),
+                child: Text(
+                  'Tarefas Concluídas', // The title text
+                  style: TextStyle(
+                      color: Colors.grey, fontSize: 20, fontFamily: 'Roboto'),
                 ),
               ),
-            ),),
-        Align(alignment: Alignment.topLeft, child:Padding(
-          padding: const EdgeInsets.only(left:30),
-          child: Text(
-            'Última semana', // The subtitle text
-            style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-                fontFamily: 'Roboto'
-            ),),
-
-        ),),
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 30),
+                child: Text(
+                  'Última semana', // The subtitle text
+                  style: TextStyle(
+                      fontSize: 14, color: Colors.grey, fontFamily: 'Roboto'),
+                ),
+              ),
+            ),
             BarChartWidget(barChartData: barChartData),
             SizedBox(height: 5),
             PieChartWidget(),
@@ -151,27 +150,26 @@ class PieChartWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Align(alignment: Alignment.topLeft, child:Padding(
-          padding: const EdgeInsets.only(top: 16.0, left:30),
-          child: Text(
-            'Status das tarefas', // The title text
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 20,
-              fontFamily: 'Roboto'
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 16.0, left: 30),
+            child: Text(
+              'Status das tarefas', // The title text
+              style: TextStyle(
+                  color: Colors.grey, fontSize: 20, fontFamily: 'Roboto'),
             ),
           ),
-        ),),
-        Align(alignment: Alignment.topLeft, child:Padding(
-          padding: const EdgeInsets.only(bottom: 20.0, left:30),
-          child: Text(
-            'Último mês', // The subtitle text
-            style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-                fontFamily: 'Roboto'
-            ),),
-
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 20.0, left: 30),
+            child: Text(
+              'Último mês', // The subtitle text
+              style: TextStyle(
+                  fontSize: 14, color: Colors.grey, fontFamily: 'Roboto'),
+            ),
           ),
         ),
         Container(
@@ -182,7 +180,8 @@ class PieChartWidget extends StatelessWidget {
               centerSpaceRadius: 0,
               sections: [
                 PieChartSectionData(
-                  color: Color.fromRGBO(1, 169, 94, 1), // Green color for 'Concluídas'
+                  color: Color.fromRGBO(
+                      1, 169, 94, 1), // Green color for 'Concluídas'
                   value: 40, // Adjust value accordingly
                   title: '40%', // You can include the percentage here
                   radius: 90,
@@ -193,7 +192,8 @@ class PieChartWidget extends StatelessWidget {
                   ),
                 ),
                 PieChartSectionData(
-                  color: Color.fromRGBO(237, 232, 100, 0.41), // Yellow color for 'Pendentes'
+                  color: Color.fromRGBO(
+                      237, 232, 100, 0.41), // Yellow color for 'Pendentes'
                   value: 30, // Adjust value accordingly
                   title: '30%', // You can include the percentage here
                   radius: 90,
@@ -204,7 +204,8 @@ class PieChartWidget extends StatelessWidget {
                   ),
                 ),
                 PieChartSectionData(
-                  color: Color.fromRGBO(237, 100, 100, 0.68),// Red color for 'Expiradas'
+                  color: Color.fromRGBO(
+                      237, 100, 100, 0.68), // Red color for 'Expiradas'
                   value: 30, // Adjust value accordingly
                   title: '30%', // You can include the percentage here
                   radius: 90,
@@ -223,38 +224,45 @@ class PieChartWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Row(children:<Widget>[
+            Row(children: <Widget>[
               CircleAvatar(
                 radius: 10,
                 backgroundColor: Color.fromRGBO(1, 169, 94, 1),
               ),
-
-            Padding(padding: EdgeInsets.only(left:5), child:Text('Concluídas', style: TextStyle(color: Colors.grey, fontFamily: 'Roboto'),)),
+              Padding(
+                  padding: EdgeInsets.only(left: 5),
+                  child: Text(
+                    'Concluídas',
+                    style: TextStyle(color: Colors.grey, fontFamily: 'Roboto'),
+                  )),
             ]),
-            Row(children:<Widget>[
+            Row(children: <Widget>[
               CircleAvatar(
                 radius: 10,
                 backgroundColor: Color.fromRGBO(237, 232, 100, 0.41),
               ),
-              Padding(padding: EdgeInsets.only(left:5), child:Text('Pendentes', style: TextStyle(color: Colors.grey, fontFamily: 'Roboto'),))
+              Padding(
+                  padding: EdgeInsets.only(left: 5),
+                  child: Text(
+                    'Pendentes',
+                    style: TextStyle(color: Colors.grey, fontFamily: 'Roboto'),
+                  ))
             ]),
-
-            Row(children: <Widget> [
+            Row(children: <Widget>[
               CircleAvatar(
                 radius: 10,
                 backgroundColor: Color.fromRGBO(237, 100, 100, 0.68),
               ),
-              Padding(padding: EdgeInsets.only(left:5), child:Text('Expiradas', style: TextStyle(color: Colors.grey, fontFamily: 'Roboto'),))
+              Padding(
+                  padding: EdgeInsets.only(left: 5),
+                  child: Text(
+                    'Expiradas',
+                    style: TextStyle(color: Colors.grey, fontFamily: 'Roboto'),
+                  ))
             ]),
           ],
         )
-
-
-
-
-
       ],
     );
   }
 }
-

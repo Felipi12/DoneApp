@@ -11,7 +11,7 @@ class TabViewItem_1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SfCalendar(
-      selectionDecoration: BoxDecoration(color:Colors.grey[100]),
+      selectionDecoration: BoxDecoration(color: Colors.grey[100]),
       todayHighlightColor: Color.fromRGBO(1, 169, 94, 1),
       viewHeaderStyle:
           ViewHeaderStyle(dateTextStyle: TextStyle(fontFamily: 'Roboto')),

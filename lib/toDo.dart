@@ -7,24 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() {
-  runApp(MaterialApp(
-    theme: ThemeData(fontFamily: 'cocogroose'),
-    localizationsDelegates: [
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate
-    ],
-    supportedLocales: [const Locale('pt', 'BR')],
-    home: Home(),
-  ));
-}
-
-class Home extends StatefulWidget {
+class ToDoList extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  _ToDoListState createState() => _ToDoListState();
 }
 
-class _HomeState extends State<Home> {
+class _ToDoListState extends State<ToDoList> {
   final _toDoController = TextEditingController();
 
   List _toDoList = [];
@@ -80,84 +68,20 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: Drawer(
-            child: Column(children: <Widget>[
-          ListTile(
-            contentPadding: EdgeInsets.fromLTRB(10, 25, 0, 0),
-            leading: Icon(Icons.menu, size: 40),
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.check,
-              color: Colors.redAccent,
-              size: 30,
-            ),
-            title: Text("Cumpridas",
-                style: TextStyle(color: Colors.redAccent, fontSize: 25)),
-          ),
-          ListTile(
-            leading: Icon(Icons.panorama_fish_eye,
-                color: Colors.redAccent, size: 30),
-            title: Text("A cumprir",
-                style: TextStyle(color: Colors.redAccent, fontSize: 25)),
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-                30, MediaQuery.of(context).size.height * .60, 0, 10),
-            child: Align(
-              alignment: Alignment.bottomLeft,
-              child: Image.asset("images/check_logo.png", scale: 1.2),
-            ),
-          ),
-        ])),
-        floatingActionButton: Builder(
-          builder: (context) => FloatingActionButton(
-            child: Icon(Icons.add),
-            backgroundColor: Colors.redAccent,
+        floatingActionButton: Align(alignment: Alignment.bottomCenter, child: FloatingActionButton(
+
+            child: Icon(Icons.add, color: Colors.white),
+            backgroundColor: Color.fromRGBO(1, 169, 94, 1),
             tooltip: "Adicionar tarefa",
             onPressed: () {
               _ModalBottomSheet(context);
             },
-          ),
-        ),
+          ),),
+
         body: RefreshIndicator(
           onRefresh: _refresh,
           child: CustomScrollView(
             slivers: <Widget>[
-              SliverAppBar(
-                backgroundColor: Colors.redAccent,
-                leading: Builder(
-                    builder: (context) => IconButton(
-                        icon: Icon(
-                          Icons.menu,
-                          size: 40,
-                        ),
-                        onPressed: () {
-                          Scaffold.of(context).openDrawer();
-                        })),
-                actions: <Widget>[
-                  Container(
-                      child: Text(
-                        getTime(),
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      padding: EdgeInsets.fromLTRB(0, 20, 20, 0)),
-                ],
-                centerTitle: false,
-                floating: false,
-                pinned: true,
-                expandedHeight: 210.0,
-                flexibleSpace: FlexibleSpaceBar(
-                    title: Text(
-                      "Tarefas",
-                      style: TextStyle(fontSize: 35),
-                    ),
-                    titlePadding: EdgeInsets.only(left: 15),
-                    background: Image.asset("images/back_check.jpg")),
-              ),
               SliverList(
                   delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
@@ -194,12 +118,12 @@ class _HomeState extends State<Home> {
                             ),
                             title: Text(
                               _toDoList[index]["title"],
-                              style: TextStyle(color: Colors.redAccent),
+                              style: TextStyle(color: Color.fromRGBO(1, 169, 94, 1)),
                             ),
                             trailing: _toDoList[index]["ok"]
                                 ? CircleAvatar(
                                     child: Icon(Icons.done),
-                                    backgroundColor: Colors.redAccent,
+                                    backgroundColor: Color.fromRGBO(1, 169, 94, 1),
                                   )
                                 : null,
                           ),
@@ -270,7 +194,7 @@ class _HomeState extends State<Home> {
                   controller: _toDoController,
                   decoration: InputDecoration(
                     labelText: "Nova tarefa",
-                    labelStyle: TextStyle(color: Colors.redAccent),
+                    labelStyle: TextStyle(color: Color.fromRGBO(1, 169, 94, 1)),
                   ),
                 ),
               ),
@@ -279,7 +203,7 @@ class _HomeState extends State<Home> {
                 child: Text("Add"),
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
-                  backgroundColor: Colors.redAccent,
+                  backgroundColor: Color.fromRGBO(1, 169, 94, 1),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(100.0),
                   ),
@@ -332,7 +256,7 @@ class _HomeState extends State<Home> {
                           controller: _toDoController,
                           decoration: InputDecoration(
                             labelText: "Nova tarefa",
-                            labelStyle: TextStyle(color: Colors.redAccent),
+                            labelStyle: TextStyle(color: Color.fromRGBO(1, 169, 94, 1)),
                           ),
                         ),
                       ),
@@ -341,7 +265,7 @@ class _HomeState extends State<Home> {
                         child: Text("Add"),
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
-                          backgroundColor: Colors.redAccent, // text color
+                          backgroundColor: Color.fromRGBO(1, 169, 94, 1), // text color
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(100.0),
                           ),
@@ -350,9 +274,6 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
-                Align(
-                    alignment: Alignment.center,
-                    child: Image.asset("images/check_logo.png", scale: 1.2)),
               ],
             ),
           ),
