@@ -1,5 +1,5 @@
 // Importa os pacotes necessários
-import 'package:doneapp/Login_Screen.dart';
+import 'package:doneapp/Profile_Screen.dart';
 import 'package:flutter/material.dart';
 
 // Constrói o Appbar/Navbar
@@ -25,7 +25,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             onTap: () => Navigator.push(
               context,
               PageRouteBuilder(
-                pageBuilder: (_, __, ___) => LoginScreen(),
+                pageBuilder: (_, __, ___) => ProfileScreen(),
                 transitionDuration: Duration(milliseconds: 50),
                 transitionsBuilder: (_, animation, __, child) {
                   return FadeTransition(opacity: animation, child: child);

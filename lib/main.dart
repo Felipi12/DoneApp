@@ -1,12 +1,13 @@
 // Importa os pacotes necessários
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doneapp/Share.dart';
 import 'package:doneapp/toDo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'Agenda.dart';
-import 'Login_Screen.dart';
+import 'Profile_Screen.dart';
 import 'Métricas.dart';
 import 'AppBar.dart';
 import 'firebase_options.dart';
@@ -203,22 +204,22 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           TabViewItem_1(controller: _controller),
           ToDoList(),
           MetricsTab(),
-          const Center(child: Text("Compartilhar vem aqui")),
+          ShareScreen(),
         ],
       ),
       endDrawer: CustomDrawer(tabController: _tabController),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 50.0),
+        padding: const EdgeInsets.only(bottom: 92.0),
         child: Align(
             alignment: Alignment.bottomCenter,
             child: _tabController.index == 0 ? AnimatedOpacity(
               // If the widget is visible, animate to 0.0 (invisible).
               // If the widget is hidden, animate to 1.0 (fully visible).
               opacity: _tabController.index < 1 ? 1.0 : 0.0,
-              duration: Duration(milliseconds: 200),
+              duration: Duration(seconds: 1),
               // The green box must be a child of the AnimatedOpacity widget.
               child: FloatingActionButton(
-                elevation: 0,
+                elevation: 0.5,
                 tooltip: "Adicionar",
                 onPressed: _showAddAppointmentDialog,
                 backgroundColor: Color.fromRGBO(1, 169, 94, 1),
@@ -227,22 +228,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   color: Colors.white,
                 ),
               ),
-            ) :
-            AnimatedOpacity(
-              opacity: _tabController.index == 1 ? 1.0 : 0.0,
-              duration: Duration(milliseconds: 200),
-              // The green box must be a child of the AnimatedOpacity widget.
-              child: FloatingActionButton(
-                elevation: 0,
-                tooltip: "Adicionar",
-                onPressed: _showAddAppointmentDialog,
-                backgroundColor: Color.fromRGBO(1, 169, 94, 1),
-                child: const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
-              ),
-            )),
+            ) : null
+            ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
