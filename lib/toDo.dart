@@ -108,7 +108,9 @@ class _ToDoListState extends State<ToDoList> {
                                 : Color.fromRGBO(1, 169, 94, 1)),
                   ),
                   Text(
-                      DateFormat('EEE', 'pt_BR').format(currentMonthList[index])[0].toUpperCase(),
+                    DateFormat('EEE', 'pt_BR')
+                        .format(currentMonthList[index])[0]
+                        .toUpperCase(),
                     style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
@@ -157,145 +159,147 @@ class _ToDoListState extends State<ToDoList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 85,
-        title: Column(children: <Widget> [titleView(), Container(
-          height: 200* 0.35,
-          width: 600,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                hrizontalCapsuleListView(),
-              ]),
-        ) ]),
-        centerTitle: true,
-      ),
-      floatingActionButton: Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: EdgeInsets.only(left: 30),
-          child: FloatingActionButton(
-            elevation: 1,
-            child: Icon(Icons.add, color: Colors.white),
-            backgroundColor: Color.fromRGBO(1, 169, 94, 1),
-            tooltip: "Adicionar tarefa",
-            onPressed: () {
-              _ModalBottomSheet(context);
-            },
+        appBar: AppBar(
+          toolbarHeight: 85,
+          title: Column(children: <Widget>[
+            titleView(),
+            Container(
+              height: 200 * 0.35,
+              width: 600,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    hrizontalCapsuleListView(),
+                  ]),
+            )
+          ]),
+          centerTitle: true,
+        ),
+        floatingActionButton: Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: EdgeInsets.only(left: 30),
+            child: FloatingActionButton(
+              elevation: 1,
+              child: Icon(Icons.add, color: Colors.white),
+              backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+              tooltip: "Adicionar tarefa",
+              onPressed: () {
+                _ModalBottomSheet(context);
+              },
+            ),
           ),
         ),
-      ),
-      body: RefreshIndicator(
-            onRefresh: _refresh,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      return Dismissible(
-                        key: Key(
-                            DateTime.now().millisecondsSinceEpoch.toString()),
-                        background: Container(
-                            color: Colors.grey,
-                            child: Align(
-                                alignment: Alignment(-0.9, 0),
-                                child:
-                                    Icon(Icons.delete, color: Colors.white))),
-                        direction: DismissDirection.startToEnd,
-                        child: Card(
-                          elevation: 0,
-                          child: ClipPath(
-                            child: Container(
-                              child: ListTile(
-                                leading: Checkbox(
-                                  checkColor: Colors.white,
-                                  fillColor: MaterialStateProperty.resolveWith(
-                                      (Set<MaterialState> states) {
-                                    if (states
-                                        .contains(MaterialState.selected)) {
-                                      return Colors.green;
-                                    }
-                                    return null;
-                                  }),
-                                  value: _toDoList[index]["ok"],
-                                  shape: CircleBorder(),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      _toDoList[index]["ok"] = value!;
-                                      _saveData();
-                                    });
-                                  },
-                                ),
-                                title: _toDoList[index]["ok"]
-                                    ?Text(
-                                  _toDoList[index]["title"],
-                                  style: TextStyle(
-                                      color: Colors.grey),
-                                ): Text(
-                                  _toDoList[index]["title"],
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(1, 169, 94, 1)),
-                                ),
-                                trailing: _toDoList[index]["ok"]
-                                    ?  Icon(Icons.done, color: CupertinoColors.white,)
-                                    : null,
+        body: RefreshIndicator(
+          onRefresh: _refresh,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            child: CustomScrollView(
+              slivers: <Widget>[
+                SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return Dismissible(
+                      key:
+                          Key(DateTime.now().millisecondsSinceEpoch.toString()),
+                      background: Container(
+                          color: Colors.grey,
+                          child: Align(
+                              alignment: Alignment(-0.9, 0),
+                              child: Icon(Icons.delete, color: Colors.white))),
+                      direction: DismissDirection.startToEnd,
+                      child: Card(
+                        elevation: 0,
+                        child: ClipPath(
+                          child: Container(
+                            child: ListTile(
+                              leading: Checkbox(
+                                checkColor: Colors.white,
+                                fillColor: MaterialStateProperty.resolveWith(
+                                    (Set<MaterialState> states) {
+                                  if (states.contains(MaterialState.selected)) {
+                                    return Colors.green;
+                                  }
+                                  return null;
+                                }),
+                                value: _toDoList[index]["ok"],
+                                shape: CircleBorder(),
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    _toDoList[index]["ok"] = value!;
+                                    _saveData();
+                                  });
+                                },
                               ),
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border(
-                                      right: BorderSide(
-                                          color: _toDoList[index]["ok"]
-                                              ? Colors.grey
-                                              : Color.fromRGBO(1, 169, 94, 1),
-                                          width: 5))),
+                              title: _toDoList[index]["ok"]
+                                  ? Text(
+                                      _toDoList[index]["title"],
+                                      style: TextStyle(color: Colors.grey),
+                                    )
+                                  : Text(
+                                      _toDoList[index]["title"],
+                                      style: TextStyle(
+                                          color: Color.fromRGBO(1, 169, 94, 1)),
+                                    ),
+                              trailing: _toDoList[index]["ok"]
+                                  ? Icon(
+                                      Icons.done,
+                                      color: CupertinoColors.white,
+                                    )
+                                  : null,
                             ),
-                            clipper: ShapeBorderClipper(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(7))),
+                            height: 50,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border(
+                                    right: BorderSide(
+                                        color: _toDoList[index]["ok"]
+                                            ? Colors.grey
+                                            : Color.fromRGBO(1, 169, 94, 1),
+                                        width: 5))),
                           ),
+                          clipper: ShapeBorderClipper(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7))),
                         ),
-                        onDismissed: (direction) {
-                          setState(() {
-                            _lastRemoved = Map.from(_toDoList[index]);
-                            _lastRemovedPosition = index;
-                            _toDoList.removeAt(index);
+                      ),
+                      onDismissed: (direction) {
+                        setState(() {
+                          _lastRemoved = Map.from(_toDoList[index]);
+                          _lastRemovedPosition = index;
+                          _toDoList.removeAt(index);
 
-                            _saveData();
+                          _saveData();
 
-                            final snack = SnackBar(
-                              backgroundColor: Colors.white,
-                              content: Text(
-                                  "Tarefa \"${_lastRemoved["title"]}\" removida com sucesso",
-                                  style: TextStyle(color: Colors.grey)),
-                              action: SnackBarAction(
-                                  label: "Desfazer",
-                                  textColor: Color.fromRGBO(1, 169, 94, 1),
-                                  onPressed: () {
-                                    setState(() {
-                                      _toDoList.insert(
-                                          _lastRemovedPosition, _lastRemoved);
-                                      _saveData();
-                                    });
-                                  }),
-                              duration: Duration(seconds: 3),
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(snack);
-                          });
-                        },
-                      );
-                    },
-                    childCount: _toDoList.length,
-                  )),
-                  //SliverList(delegate: SliverChildListDelegate([aWidget()]))
-                ],
-              ),
+                          final snack = SnackBar(
+                            backgroundColor: Colors.white,
+                            content: Text(
+                                "Tarefa \"${_lastRemoved["title"]}\" removida com sucesso",
+                                style: TextStyle(color: Colors.grey)),
+                            action: SnackBarAction(
+                                label: "Desfazer",
+                                textColor: Color.fromRGBO(1, 169, 94, 1),
+                                onPressed: () {
+                                  setState(() {
+                                    _toDoList.insert(
+                                        _lastRemovedPosition, _lastRemoved);
+                                    _saveData();
+                                  });
+                                }),
+                            duration: Duration(seconds: 3),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snack);
+                        });
+                      },
+                    );
+                  },
+                  childCount: _toDoList.length,
+                )),
+                //SliverList(delegate: SliverChildListDelegate([aWidget()]))
+              ],
             ),
-          )
-
-    );
+          ),
+        ));
   }
 
   Widget aWidget() {

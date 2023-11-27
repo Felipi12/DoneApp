@@ -109,7 +109,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'DoneApp',
       theme: ThemeData(
-
         // Define a fonte padrão do aplicativo
         iconTheme:
             const IconThemeData(color: Colors.white), // Define o tema do ícone
@@ -175,7 +174,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         unselectedLabelColor: Colors.grey[400],
         overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
         indicatorSize: TabBarIndicatorSize.tab,
-        indicator: BoxDecoration(borderRadius: BorderRadius.circular(20),// Creates border
+        indicator: BoxDecoration(
+            borderRadius: BorderRadius.circular(20), // Creates border
             color: Colors.grey[100]),
         controller: _tabController,
         tabs: const <Widget>[
@@ -212,24 +212,25 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         padding: const EdgeInsets.only(bottom: 92.0),
         child: Align(
             alignment: Alignment.bottomCenter,
-            child: _tabController.index == 0 ? AnimatedOpacity(
-              // If the widget is visible, animate to 0.0 (invisible).
-              // If the widget is hidden, animate to 1.0 (fully visible).
-              opacity: _tabController.index < 1 ? 1.0 : 0.0,
-              duration: Duration(seconds: 1),
-              // The green box must be a child of the AnimatedOpacity widget.
-              child: FloatingActionButton(
-                elevation: 0.5,
-                tooltip: "Adicionar",
-                onPressed: _showAddAppointmentDialog,
-                backgroundColor: Color.fromRGBO(1, 169, 94, 1),
-                child: const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
-              ),
-            ) : null
-            ),
+            child: _tabController.index == 0
+                ? AnimatedOpacity(
+                    // If the widget is visible, animate to 0.0 (invisible).
+                    // If the widget is hidden, animate to 1.0 (fully visible).
+                    opacity: _tabController.index < 1 ? 1.0 : 0.0,
+                    duration: Duration(seconds: 1),
+                    // The green box must be a child of the AnimatedOpacity widget.
+                    child: FloatingActionButton(
+                      elevation: 0.5,
+                      tooltip: "Adicionar",
+                      onPressed: _showAddAppointmentDialog,
+                      backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                : null),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
@@ -308,7 +309,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       barrierDismissible: false, // Usuário deve tocar no botão para fechar
       builder: (BuildContext context) {
         return AlertDialog(
-
           title: const Text('Novo Compromisso',
               style: TextStyle(fontFamily: 'Roboto', fontSize: 18)),
           content: SingleChildScrollView(
@@ -413,9 +413,18 @@ class CustomSwitchState extends State<CustomSwitch> {
         clipBehavior: Clip.none,
         children: <Widget>[
           Switch(
+            trackOutlineColor: MaterialStateProperty.resolveWith(
+              (final Set<MaterialState> states) {
+                if (states.contains(MaterialState.selected)) {
+                  return null;
+                }
+
+                return Colors.transparent;
+              },
+            ),
             activeTrackColor: Colors.grey,
             inactiveThumbColor: Colors.white,
-            inactiveTrackColor: Colors.grey[350],
+            inactiveTrackColor: Colors.grey,
             activeColor: Colors.white,
             value: _isSwitched,
             onChanged: (value) {

@@ -22,13 +22,12 @@ class ProfileScreen extends StatelessWidget {
           toolbarHeight: 70,
           title: Padding(
               padding: EdgeInsets.only(left: 95),
-              child: Text('Perfil', style: TextStyle(color: Colors.white))),
+              child: Text('Perfil', style: TextStyle(color: Colors.white, fontFamily: 'RedHatDisplay'))),
           iconTheme: const IconThemeData(color: Colors.white, size: 40),
         ),
         body: Column(
           children: [
             Stack(
-              clipBehavior: Clip.,
               children: [
                 Positioned(
                   top: -50,
@@ -57,7 +56,8 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text('felipe_USERNAME'),
+                  children: [
+                    Text('felipe_USERNAME'),
                   ],
                 )
               ],
