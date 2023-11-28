@@ -6,18 +6,15 @@ class AppointmentEntity implements EntityInterface {
       {this.id,
       required this.startTime,
       required this.endTime,
-      required this.date,
       required this.color,
       required this.description,
       this.userId = ""});
 
   String? id = "";
 
-  String startTime;
+  Timestamp startTime;
 
-  String endTime;
-
-  Timestamp date;
+  Timestamp endTime;
 
   String color;
 
@@ -30,7 +27,6 @@ class AppointmentEntity implements EntityInterface {
     return {
       'startTime': startTime,
       'endTime': endTime,
-      'date': date,
       'color': color,
       'description': description,
       'userId': userId,

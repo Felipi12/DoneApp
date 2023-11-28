@@ -1,7 +1,10 @@
 // Importa os pacotes necessários
+import 'package:doneapp/clients/controllers/appointments_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+
+import 'clients/entities/appointment_entity.dart';
 
 // Constrói o calendário da tela de Agenda
 class TabViewItem_1 extends StatelessWidget {
@@ -9,34 +12,42 @@ class TabViewItem_1 extends StatelessWidget {
 
   const TabViewItem_1({super.key, required this.controller});
 
-  @override
-  Widget build(BuildContext context) {
-    return SfCalendar(
-      selectionDecoration: BoxDecoration(color: Colors.grey[100]),
-      todayHighlightColor: Color.fromRGBO(1, 169, 94, 1),
-      viewHeaderStyle:
-          ViewHeaderStyle(dateTextStyle: TextStyle(fontFamily: 'Roboto')),
-      todayTextStyle: TextStyle(fontFamily: 'Roboto'),
-      appointmentTextStyle:
-          TextStyle(color: Colors.white, fontFamily: 'Roboto'),
-      showNavigationArrow: true,
-      showCurrentTimeIndicator: true,
-      headerStyle:
-          CalendarHeaderStyle(textStyle: TextStyle(fontFamily: 'Roboto')),
-      view: CalendarView.week,
-      allowedViews: const [
-        CalendarView.day,
-        CalendarView.week,
-        CalendarView.month,
-      ],
-      cellEndPadding: 0,
-      controller: controller,
-      initialDisplayDate: DateTime.now(),
-      dataSource: CalendarDataSourceUtility.getCalendarDataSource(),
-      onTap: calendarTapped,
-      monthViewSettings: const MonthViewSettings(
-          navigationDirection: MonthNavigationDirection.vertical),
-    );
+  Widget build(context) {
+    return FutureBuilder<DataSource>(
+        future: CalendarDataSourceUtility.getCalendarDataSource(),
+        builder: (context, AsyncSnapshot<DataSource> snapshot) {
+          if (snapshot.hasData) {
+            return SfCalendar(
+              selectionDecoration: BoxDecoration(color: Colors.grey[100]),
+              todayHighlightColor: Color.fromRGBO(1, 169, 94, 1),
+              viewHeaderStyle: ViewHeaderStyle(
+                  dateTextStyle: TextStyle(fontFamily: 'Roboto')),
+              todayTextStyle: TextStyle(fontFamily: 'Roboto'),
+              appointmentTextStyle:
+                  TextStyle(color: Colors.white, fontFamily: 'Roboto'),
+              showNavigationArrow: true,
+              showCurrentTimeIndicator: true,
+              headerStyle: CalendarHeaderStyle(
+                  textStyle: TextStyle(fontFamily: 'Roboto')),
+              view: CalendarView.week,
+              allowedViews: const [
+                CalendarView.day,
+                CalendarView.week,
+                CalendarView.month,
+              ],
+              cellEndPadding: 0,
+              controller: controller,
+              initialDisplayDate: DateTime.now(),
+              dataSource: snapshot.data,
+              onTap: calendarTapped,
+              monthViewSettings: const MonthViewSettings(
+                  navigationDirection: MonthNavigationDirection.vertical),
+            );
+            ;
+          } else {
+            return CircularProgressIndicator();
+          }
+        });
   }
 
   void calendarTapped(CalendarTapDetails calendarTapDetails) {
@@ -53,32 +64,20 @@ class TabViewItem_1 extends StatelessWidget {
 
 // MOCK DE DADOS
 class CalendarDataSourceUtility {
-  static DataSource getCalendarDataSource() {
+  static Future<DataSource> getCalendarDataSource() async {
     final List<Appointment> appointments = <Appointment>[];
-    appointments.add(Appointment(
-      startTime: DateTime.now(),
-      endTime: DateTime.now().add(const Duration(hours: 1)),
-      subject: 'Meeting',
-      color: Colors.pink,
-    ));
-    appointments.add(Appointment(
-      startTime: DateTime.now().add(const Duration(hours: 4)),
-      endTime: DateTime.now().add(const Duration(hours: 5)),
-      subject: 'Release Meeting',
-      color: Colors.lightBlueAccent,
-    ));
-    appointments.add(Appointment(
-      startTime: DateTime(2023, 11, 22, 1, 0, 0),
-      endTime: DateTime(2023, 11, 22, 3, 0, 0),
-      subject: 'Support',
-      color: Colors.green,
-    ));
-    appointments.add(Appointment(
-      startTime: DateTime(2023, 11, 24, 3, 0, 0),
-      endTime: DateTime(2023, 11, 24, 4, 0, 0),
-      subject: 'Retrospective',
-      color: Color.fromRGBO(1, 169, 94, 0.5),
-    ));
+
+    AppointmentsController appCtrl = new AppointmentsController();
+
+    List<AppointmentEntity> appEnt = await appCtrl.getAll();
+
+    appEnt.map((e) => {
+          appointments.add(Appointment(
+            startTime: e.startTime.toDate(),
+            endTime: e.endTime.toDate(),
+            subject: e.description,
+          ))
+        });
 
     return DataSource(appointments);
   }

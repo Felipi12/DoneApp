@@ -19,14 +19,15 @@ import 'package:firebase_core/firebase_core.dart';
 
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  primaryColor: Colors.green[900],
+  primaryColor: Colors.green[1000],
   scaffoldBackgroundColor: Colors.black,
   textTheme: TextTheme(
-    bodyText1: TextStyle(color: Colors.white),
-    bodyText2: TextStyle(color: Colors.white),
+    bodyLarge: TextStyle(color: Colors.green[900]),
+    bodyMedium: TextStyle(color: Colors.white),
+    bodySmall: TextStyle(color: Colors.green),
   ),
   iconTheme: IconThemeData(
-    color: Colors.green[900],
+    color: Colors.green[1000],
   ),
 );
 
@@ -35,8 +36,9 @@ ThemeData lightTheme = ThemeData(
   primaryColor: Color.fromRGBO(1, 169, 94, 1),
   scaffoldBackgroundColor: Colors.white,
   textTheme: TextTheme(
-    bodyText1: TextStyle(color: Colors.white),
-    bodyText2: TextStyle(color: Colors.white),
+    bodyLarge: TextStyle(color: Colors.green[900]),
+    bodyMedium: TextStyle(color: Colors.white),
+    bodySmall: TextStyle(color: Colors.green),
   ),
   iconTheme: IconThemeData(
     color: Color.fromRGBO(1, 169, 94, 1),
@@ -47,14 +49,8 @@ class SplashScreenApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: Color.fromRGBO(60, 103, 61, 1),
-        scaffoldBackgroundColor: Colors.black,
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
-      ),
+      theme: lightTheme,
+      darkTheme: darkTheme,
       title: 'Splash Screen',
       home: HomeView(),
       debugShowCheckedModeBanner: false,
@@ -62,12 +58,18 @@ class SplashScreenApp extends StatelessWidget {
   }
 }
 
+
+
+
 class HomeView extends StatefulWidget {
   @override
   _HomeViewState createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
+
+  static final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
+
   @override
   void initState() {
     super.initState();
@@ -145,11 +147,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'DoneApp',
-      theme: ThemeData(
-        // Define a fonte padrão do aplicativo
-        iconTheme:
-            const IconThemeData(color: Colors.white), // Define o tema do ícone
-      ),
+      theme: lightTheme,
+      darkTheme: darkTheme,
       home:
           const MyHomePage(title: ''), // Define a página inicial do aplicativo
       supportedLocales: [Locale('pt', 'BR')], // Include Portuguese (Brazil)
@@ -416,6 +415,7 @@ class CustomSwitch extends StatefulWidget {
 
 class CustomSwitchState extends State<CustomSwitch> {
   bool _isSwitched = false;
+  int actualTheme = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -439,6 +439,7 @@ class CustomSwitchState extends State<CustomSwitch> {
             activeColor: Colors.white,
             value: _isSwitched,
             onChanged: (value) {
+              actualTheme=1;
               setState(() {
                 _isSwitched = value;
               });
