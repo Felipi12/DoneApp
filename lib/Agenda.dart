@@ -1,5 +1,6 @@
 // Importa os pacotes necessários
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 // Constrói o calendário da tela de Agenda
@@ -11,7 +12,7 @@ class TabViewItem_1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SfCalendar(
-      selectionDecoration: BoxDecoration(color:Colors.grey[100]),
+      selectionDecoration: BoxDecoration(color: Colors.grey[100]),
       todayHighlightColor: Color.fromRGBO(1, 169, 94, 1),
       viewHeaderStyle:
           ViewHeaderStyle(dateTextStyle: TextStyle(fontFamily: 'Roboto')),

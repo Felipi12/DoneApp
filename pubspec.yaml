@@ -97,6 +97,11 @@ flutter:
     - assets/done_logo_white.png
     - assets/done_logo_icon.png
     - assets/avatar.png
+    - assets/check_green.png
+    - assets/job_done.png
+    - assets/x.png
+    - assets/face.png
+    - assets/gen_avatar.png
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages

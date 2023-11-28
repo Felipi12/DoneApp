@@ -1,4 +1,5 @@
 // Importa os pacotes necessários
+import 'package:doneapp/Profile_Screen.dart';
 import 'package:flutter/material.dart';
 
 // Constrói o Appbar/Navbar
@@ -20,15 +21,25 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         padding: EdgeInsets.only(left: 10),
         child: SizedBox(
           height: 200,
-          child: Ink.image(
-            fit: BoxFit.contain, //
-            image: AssetImage('assets/avatar.png'),
+          child: InkWell(
+            onTap: () => Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => ProfileScreen(),
+                transitionDuration: Duration(milliseconds: 50),
+                transitionsBuilder: (_, animation, __, child) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+              ),
+            ), //
+            child: Image.asset('assets/avatar.png'),
           ),
         ),
       ),
       toolbarHeight: 70,
       title: Center(
-        child: Text(_getTitleBasedOnTab(selectedIndex), style: TextStyle(color: Colors.white)),
+        child: Text(_getTitleBasedOnTab(selectedIndex),
+            style: TextStyle(color: Colors.white, fontFamily: 'RedHatDisplay')),
       ),
       iconTheme: const IconThemeData(color: Colors.white, size: 40),
     );
