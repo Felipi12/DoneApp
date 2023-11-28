@@ -59,6 +59,7 @@ class BarChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var currentTheme = Theme.of(context);
     List<BarChartGroupData> generateBarGroups() {
       return List.generate(barChartData.length, (index) {
         return BarChartGroupData(
@@ -66,7 +67,7 @@ class BarChartWidget extends StatelessWidget {
           barRods: [
             BarChartRodData(
               toY: barChartData[index].toDouble(),
-              color: Color.fromRGBO(1, 169, 94, 1), // Set the color to green
+              color: currentTheme.primaryColor, // Set the color to green
               width: 28,
               borderRadius: BorderRadius.circular(2),
             ),
@@ -148,6 +149,7 @@ class BarChartWidget extends StatelessWidget {
 class PieChartWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var currentTheme = Theme.of(context);
     return Column(
       children: [
         Align(
@@ -180,8 +182,8 @@ class PieChartWidget extends StatelessWidget {
               centerSpaceRadius: 0,
               sections: [
                 PieChartSectionData(
-                  color: Color.fromRGBO(
-                      1, 169, 94, 1), // Green color for 'Concluídas'
+                  color:
+                      currentTheme.primaryColor, // Green color for 'Concluídas'
                   value: 40, // Adjust value accordingly
                   title: '40%', // You can include the percentage here
                   radius: 90,
@@ -227,7 +229,7 @@ class PieChartWidget extends StatelessWidget {
             Row(children: <Widget>[
               CircleAvatar(
                 radius: 10,
-                backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+                backgroundColor: currentTheme.primaryColor,
               ),
               Padding(
                   padding: EdgeInsets.only(left: 5),

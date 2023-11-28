@@ -1,4 +1,6 @@
 // Importa os pacotes necessários
+// ignore_for_file: unused_import
+
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doneapp/Share.dart';
@@ -6,7 +8,6 @@ import 'package:doneapp/toDo.dart';
 import 'package:doneapp/clients/controllers/appointments_controller.dart';
 import 'package:doneapp/clients/entities/appointment_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'Agenda.dart';
 import 'LoginScreen.dart';
@@ -22,8 +23,8 @@ ThemeData darkTheme = ThemeData(
   primaryColor: Colors.green[900],
   scaffoldBackgroundColor: Colors.black,
   textTheme: TextTheme(
-    bodyText1: TextStyle(color: Colors.white),
-    bodyText2: TextStyle(color: Colors.white),
+    bodyLarge: TextStyle(color: Colors.white),
+    bodyMedium: TextStyle(color: Colors.white),
   ),
   iconTheme: IconThemeData(
     color: Colors.green[900],
@@ -35,8 +36,8 @@ ThemeData lightTheme = ThemeData(
   primaryColor: Color.fromRGBO(1, 169, 94, 1),
   scaffoldBackgroundColor: Colors.white,
   textTheme: TextTheme(
-    bodyText1: TextStyle(color: Colors.white),
-    bodyText2: TextStyle(color: Colors.white),
+    bodyLarge: TextStyle(color: Colors.white),
+    bodyMedium: TextStyle(color: Colors.white),
   ),
   iconTheme: IconThemeData(
     color: Color.fromRGBO(1, 169, 94, 1),
@@ -46,18 +47,16 @@ ThemeData lightTheme = ThemeData(
 class SplashScreenApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: Color.fromRGBO(60, 103, 61, 1),
-        scaffoldBackgroundColor: Colors.black,
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
-      ),
-      title: 'Splash Screen',
-      home: HomeView(),
-      debugShowCheckedModeBanner: false,
+    return ValueListenableBuilder(
+      valueListenable: isDarkMode,
+      builder: (context, bool isDark, _) {
+        return MaterialApp(
+          title: 'Splash Screen',
+          theme: isDark ? darkTheme : lightTheme,
+          home: HomeView(),
+          debugShowCheckedModeBanner: false,
+        );
+      },
     );
   }
 }
@@ -87,8 +86,9 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
     return Scaffold(
-        backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+        backgroundColor: currentTheme.primaryColor,
         body: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
@@ -137,28 +137,30 @@ void main() async {
   runApp(SplashScreenApp());
 }
 
+// Global theme state management
+ValueNotifier<bool> isDarkMode = ValueNotifier(false);
+
+// MyApp class modified for dynamic theming
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // Método para construir o widget principal do aplicativo
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'DoneApp',
-      theme: ThemeData(
-        // Define a fonte padrão do aplicativo
-        iconTheme:
-            const IconThemeData(color: Colors.white), // Define o tema do ícone
-      ),
-      home:
-          const MyHomePage(title: ''), // Define a página inicial do aplicativo
-      supportedLocales: [Locale('pt', 'BR')], // Include Portuguese (Brazil)
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations
-            .delegate, // Important for iOS style widgets
-      ],
+    return ValueListenableBuilder(
+      valueListenable: isDarkMode,
+      builder: (context, bool isDark, _) {
+        return MaterialApp(
+          title: 'DoneApp',
+          theme: isDark ? darkTheme : lightTheme,
+          home: const MyHomePage(title: ''),
+          supportedLocales: [Locale('pt', 'BR')],
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+        );
+      },
     );
   }
 }
@@ -201,10 +203,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   // Constrói o layout
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
     return Scaffold(
       bottomNavigationBar: TabBar(
-        indicatorColor: Color.fromRGBO(1, 169, 94, 1),
-        labelColor: Color.fromRGBO(1, 169, 94, 1),
+        indicatorColor: currentTheme.primaryColor,
+        labelColor: currentTheme.primaryColor,
         labelStyle:
             TextStyle(fontFamily: 'Roboto', color: Colors.white, fontSize: 12),
         physics: BouncingScrollPhysics(),
@@ -213,24 +216,23 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         indicatorSize: TabBarIndicatorSize.tab,
         indicator: BoxDecoration(
             borderRadius: BorderRadius.circular(20), // Creates border
-            color: Colors.grey[100]),
+            color: currentTheme.scaffoldBackgroundColor),
         controller: _tabController,
-        tabs: const <Widget>[
+        tabs: <Widget>[
           Tab(
               text: "Agenda",
               icon: Icon(Icons.calendar_month_outlined,
-                  color: Color.fromRGBO(1, 169, 94, 1))),
+                  color: currentTheme.primaryColor)),
           Tab(
               text: "Tarefas",
               icon: Icon(Icons.task_alt_rounded,
-                  color: Color.fromRGBO(1, 169, 94, 1))),
+                  color: currentTheme.primaryColor)),
           Tab(
               text: "Métricas",
-              icon:
-                  Icon(Icons.bar_chart, color: Color.fromRGBO(1, 169, 94, 1))),
+              icon: Icon(Icons.bar_chart, color: currentTheme.primaryColor)),
           Tab(
               text: "Share",
-              icon: Icon(Icons.share, color: Color.fromRGBO(1, 169, 94, 1))),
+              icon: Icon(Icons.share, color: currentTheme.primaryColor)),
         ],
       ),
       appBar: CustomAppBar(
@@ -260,7 +262,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       elevation: 0.5,
                       tooltip: "Adicionar",
                       onPressed: _showAddAppointmentDialog,
-                      backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+                      backgroundColor: currentTheme.primaryColor,
                       child: const Icon(
                         Icons.add,
                         color: Colors.white,
@@ -280,8 +282,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     TextEditingController timeController = TextEditingController();
     DateTime? selectedDate = DateTime.now();
     TimeOfDay? selectedTime = TimeOfDay.now();
-    List<String> repeatDays = [];
-    Color selectedColor = Color.fromRGBO(255, 234, 142, 1.0);
+    // List<String> repeatDays = [];
+    // Color selectedColor = Color.fromRGBO(255, 234, 142, 1.0);
 
     // Atualiza o controlador de data
     void _updateDateField(DateTime selectedDate) {
@@ -415,52 +417,52 @@ class CustomSwitch extends StatefulWidget {
 }
 
 class CustomSwitchState extends State<CustomSwitch> {
-  bool _isSwitched = false;
-
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      trailing: Stack(
-        clipBehavior: Clip.none,
-        children: <Widget>[
-          Switch(
-            trackOutlineColor: MaterialStateProperty.resolveWith(
-              (final Set<MaterialState> states) {
-                if (states.contains(MaterialState.selected)) {
-                  return null;
-                }
-
-                return Colors.transparent;
-              },
-            ),
-            activeTrackColor: Colors.grey,
-            inactiveThumbColor: Colors.white,
-            inactiveTrackColor: Colors.grey,
-            activeColor: Colors.white,
-            value: _isSwitched,
-            onChanged: (value) {
-              setState(() {
-                _isSwitched = value;
-              });
-            },
+    return ValueListenableBuilder(
+      valueListenable: isDarkMode,
+      builder: (context, bool isDark, _) {
+        return ListTile(
+          trailing: Stack(
+            clipBehavior: Clip.none,
+            children: <Widget>[
+              Switch(
+                trackOutlineColor: MaterialStateProperty.resolveWith(
+                  (final Set<MaterialState> states) {
+                    if (states.contains(MaterialState.selected)) {
+                      return null;
+                    }
+                    return Colors.transparent;
+                  },
+                ),
+                activeTrackColor: Colors.black,
+                inactiveThumbColor: Colors.white,
+                inactiveTrackColor: Colors.grey,
+                activeColor: Colors.white,
+                value: isDark,
+                onChanged: (value) {
+                  isDarkMode.value = value;
+                },
+              ),
+              Positioned(
+                top: -20,
+                left: 18,
+                child: Icon(
+                    isDark
+                        ? Icons.nightlight_outlined
+                        : Icons.wb_sunny_outlined,
+                    size: 20,
+                    color: Colors.white),
+              ),
+            ],
           ),
-          Positioned(
-            top: -20,
-            left: 18,
-            child: Icon(
-                _isSwitched
-                    ? Icons.nightlight_outlined
-                    : Icons.wb_sunny_outlined,
-                size: 20,
-                color: Colors.white),
+          leading: const Icon(
+            Icons.format_size,
+            color: Colors.white,
+            size: 40,
           ),
-        ],
-      ),
-      leading: const Icon(
-        Icons.format_size,
-        color: Colors.white,
-        size: 40,
-      ),
+        );
+      },
     );
   }
 }
@@ -473,8 +475,9 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
     return Drawer(
-      backgroundColor: const Color.fromRGBO(1, 169, 94, 1),
+      backgroundColor: currentTheme.primaryColor,
       child: Column(
         children: <Widget>[
           Align(
