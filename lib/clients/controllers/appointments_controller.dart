@@ -47,21 +47,24 @@ class AppointmentsController extends BaseController {
   Future<List<AppointmentEntity>> getAll() async {
     try {
       QuerySnapshot querySnapshot = await collection
-          .where('userId',
-              isEqualTo: AuthenticatorController.getLoggedUser().id)
           .get();
+
+      print(AuthenticatorController.getLoggedUser().id);
+      print('estive aqui');
+
       List<AppointmentEntity> allAppointments = querySnapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return AppointmentEntity(
           id: doc.id,
           startTime: data['startTime'],
           endTime: data['endTime'],
-          date: data['date'],
           color: data['color'],
           description: data['description'],
           userId: data['userId'],
         );
       }).toList();
+
+      print(allAppointments);
       return allAppointments;
     } catch (e) {
       print('Error getting appointments: $e');
@@ -78,7 +81,6 @@ class AppointmentsController extends BaseController {
         id: documentSnapshot.id,
         startTime: data['startTime'],
         endTime: data['endTime'],
-        date: data['date'],
         color: data['color'],
         description: data['description'],
         userId: data['userId'],
@@ -107,7 +109,6 @@ class AppointmentsController extends BaseController {
         id: documentSnapshot.id,
         startTime: data['startTime'],
         endTime: data['endTime'],
-        date: data['date'],
         color: data['color'],
         description: data['description'],
         userId: data['userId'],
@@ -132,7 +133,6 @@ class AppointmentsController extends BaseController {
         id: documentSnapshot.id,
         startTime: data['startTime'],
         endTime: data['endTime'],
-        date: data['date'],
         color: data['color'],
         description: data['description'],
         userId: data['userId'],

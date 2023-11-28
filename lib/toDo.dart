@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doneapp/clients/controllers/tasks_controller.dart';
+import 'package:doneapp/clients/entities/tasks_entity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -16,71 +19,93 @@ class ToDoList extends StatefulWidget {
 class _ToDoListState extends State<ToDoList> {
   final _toDoController = TextEditingController();
   List<DateTime> currentMonthList = List.empty();
-  DateTime currentDateTime = DateTime.now();
+  DateTime currentDateTime =
+  DateTime.now
+    ();
   late ScrollController scrollController;
-  final size=2;
+  final size = 2;
 
   //List<List<int>> grid = List<List<int>>.generate(
-    //  this.size, (i) => List<int>.generate(this.size, (j) => i * this.size + j));
+  //  this.size, (i) => List<int>.generate(this.size, (j) => i * this.size + j));
 
-  List _toDoList = [];
-  late Map<String, dynamic> _lastRemoved;
-  late int _lastRemovedPosition;
+  List<TaskEntity> _toDoList = [];
+  late TaskEntity _lastRemoved;
 
   @override
   void initState() {
     DateTime firstDayOfMonth =
-        DateTime(currentDateTime.year, currentDateTime.month);
+    DateTime(currentDateTime.year, currentDateTime.month);
     DateTime firstDayOfNextMonth =
-        DateTime(currentDateTime.year, currentDateTime.month + 1);
+    DateTime(currentDateTime.year, currentDateTime.month + 1);
 
     int daysInMonth = firstDayOfNextMonth.difference(firstDayOfMonth).inDays;
     List<DateTime> dates = List.generate(
         daysInMonth, (i) => firstDayOfMonth.add(Duration(days: i)));
     currentMonthList = dates;
-    currentMonthList.sort((a, b) => a.day.compareTo(b.day));
+    currentMonthList.sort((a, b) => a.day.compareTo(
+        b.day
+    ));
     currentMonthList = currentMonthList.toSet().toList();
     scrollController =
-        ScrollController(initialScrollOffset: 1.0 * currentDateTime.day);
+        ScrollController(initialScrollOffset: 1.0 *
+            currentDateTime.day
+        );
+    refreshData();
     super.initState();
+  }
 
-    _readData().then((data) {
+  void refreshData() {
+    TasksController().getAll().then((tasks) {
+      print(tasks);
       setState(() {
-        _toDoList = json.decode(data!);
+        _toDoList = tasks;
       });
     });
   }
 
   void _addToDo() {
-    setState(() {
-      Map<String, dynamic> newToDo = Map();
-      newToDo["title"] = _toDoController.text;
-      _toDoController.text = "";
-      newToDo["ok"] = false;
-      _toDoList.add(newToDo);
-      _saveData();
+    TasksController()
+        .create(TaskEntity(
+        done: false,
+        desc: _toDoController.text,
+        date: Timestamp.fromDate(
+            DateTime.now
+              ()),
+        array: ""))
+        .then((task) {
+      setState(() {
+        _toDoController.text = "";
+        refreshData();
+      });
     });
   }
 
   Future<Null> _refresh() async {
+    /*
     await Future.delayed(Duration(seconds: 1));
 
     setState(() {
       _toDoList.sort((a, b) {
-        if (a["ok"] && !b["ok"])
+        if (a.done && !b.done)
           return 1;
-        else if (!a["ok"] && b["ok"])
+        else if (!a.done && b.done)
           return -1;
         else
           return 0;
       });
 
       _saveData();
+    });*/
+
+    setState(() {
+      refreshData();
     });
   }
 
   String getTime() {
-    final DateTime now = DateTime.now();
+    final DateTime now =
+    DateTime.now
+      ();
     final DateFormat formatter = DateFormat(DateFormat.YEAR_MONTH_DAY, 'pt_Br');
     final String formatted = formatter.format(now);
     return formatted;
@@ -100,16 +125,20 @@ class _ToDoListState extends State<ToDoList> {
             height: 50,
             child: Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment:
+                MainAxisAlignment.center
+                ,
                 children: <Widget>[
                   Text(
                     currentMonthList[index].day.toString(),
                     style: TextStyle(
                         fontSize: 16,
                         color:
-                            (currentMonthList[index].day != currentDateTime.day)
-                                ? Colors.grey
-                                : Color.fromRGBO(1, 169, 94, 1)),
+                        (currentMonthList[index].day !=
+                            currentDateTime.day
+                        )
+                            ? Colors.grey
+                            : Color.fromRGBO(1, 169, 94, 1)),
                   ),
                   Text(
                     DateFormat('EEE', 'pt_BR')
@@ -119,9 +148,11 @@ class _ToDoListState extends State<ToDoList> {
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                         color:
-                            (currentMonthList[index].day != currentDateTime.day)
-                                ? Colors.grey
-                                : Color.fromRGBO(1, 169, 94, 1)),
+                        (currentMonthList[index].day !=
+                            currentDateTime.day
+                        )
+                            ? Colors.grey
+                            : Color.fromRGBO(1, 169, 94, 1)),
                   )
                 ],
               ),
@@ -151,8 +182,12 @@ class _ToDoListState extends State<ToDoList> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
       child: Text(
-        DateFormat('MMMM', 'pt_BR').format(DateTime.now())[0].toUpperCase() +
-            DateFormat('MMMM', 'pt_BR').format(DateTime.now()).substring(1) +
+        DateFormat('MMMM', 'pt_BR').format(
+            DateTime.now
+              ())[0].toUpperCase() +
+            DateFormat('MMMM', 'pt_BR').format(
+                DateTime.now
+                  ()).substring(1) +
             ' ' +
             currentDateTime.year.toString(),
         style: const TextStyle(color: Colors.grey, fontSize: 20),
@@ -171,7 +206,9 @@ class _ToDoListState extends State<ToDoList> {
               height: 200 * 0.35,
               width: 600,
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment:
+                  MainAxisAlignment.center
+                  ,
                   children: <Widget>[
                     hrizontalCapsuleListView(),
                   ]),
@@ -202,103 +239,106 @@ class _ToDoListState extends State<ToDoList> {
               slivers: <Widget>[
                 SliverList(
                     delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return Dismissible(
-                      key:
-                          Key(DateTime.now().millisecondsSinceEpoch.toString()),
-                      background: Container(
-                          color: Colors.grey,
-                          child: Align(
-                              alignment: Alignment(-0.9, 0),
-                              child: Icon(Icons.delete, color: Colors.white))),
-                      direction: DismissDirection.startToEnd,
-                      child: Card(
-                        elevation: 0,
-                        child: ClipPath(
-                          child: Container(
-                            child: ListTile(
-                              leading: Checkbox(
-                                checkColor: Colors.white,
-                                fillColor: MaterialStateProperty.resolveWith(
-                                    (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.selected)) {
-                                    return Colors.green;
-                                  }
-                                  return null;
-                                }),
-                                value: _toDoList[index]["ok"],
-                                shape: CircleBorder(),
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    _toDoList[index]["ok"] = value!;
-                                    _saveData();
-                                  });
-                                },
+                          (BuildContext context, int index) {
+                        return Dismissible(
+                          key:
+                          Key(
+                              DateTime.now
+                                ().millisecondsSinceEpoch.toString()),
+                          background: Container(
+                              color: Colors.grey,
+                              child: Align(
+                                  alignment: Alignment(-0.9, 0),
+                                  child: Icon(Icons.delete, color: Colors.white))),
+                          direction: DismissDirection.startToEnd,
+                          child: Card(
+                            elevation: 0,
+                            child: ClipPath(
+                              child: Container(
+                                child: ListTile(
+                                  leading: Checkbox(
+                                    checkColor: Colors.white,
+                                    fillColor: MaterialStateProperty.resolveWith(
+                                            (Set<MaterialState> states) {
+                                          if (states.contains(MaterialState.selected)) {
+                                            return
+                                              Colors.green
+                                            ;
+                                          }
+                                          return null;
+                                        }),
+                                    value: _toDoList[index].done,
+                                    shape: CircleBorder(),
+                                    onChanged: (bool? value) {
+                                      _toDoList[index].done = value!;
+                                      TasksController()
+                                          .update(_toDoList[index])
+                                          .then((value) => refreshData());
+                                    },
+                                  ),
+                                  title: _toDoList[index].done
+                                      ? Text(
+                                    _toDoList[index].desc,
+                                    style: TextStyle(color: Colors.grey),
+                                  )
+                                      : Text(
+                                    _toDoList[index].desc,
+                                    style: TextStyle(
+                                        color: Color.fromRGBO(1, 169, 94, 1)),
+                                  ),
+                                  trailing: _toDoList[index].done
+                                      ? Icon(
+                                    Icons.done,
+                                    color: CupertinoColors.white,
+                                  )
+                                      : null,
+                                ),
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border(
+                                        right: BorderSide(
+                                            color: _toDoList[index].done
+                                                ? Colors.grey
+                                                : Color.fromRGBO(1, 169, 94, 1),
+                                            width: 5))),
                               ),
-                              title: _toDoList[index]["ok"]
-                                  ? Text(
-                                      _toDoList[index]["title"],
-                                      style: TextStyle(color: Colors.grey),
-                                    )
-                                  : Text(
-                                      _toDoList[index]["title"],
-                                      style: TextStyle(
-                                          color: Color.fromRGBO(1, 169, 94, 1)),
-                                    ),
-                              trailing: _toDoList[index]["ok"]
-                                  ? Icon(
-                                      Icons.done,
-                                      color: CupertinoColors.white,
-                                    )
-                                  : null,
+                              clipper: ShapeBorderClipper(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(7))),
                             ),
-                            height: 50,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border(
-                                    right: BorderSide(
-                                        color: _toDoList[index]["ok"]
-                                            ? Colors.grey
-                                            : Color.fromRGBO(1, 169, 94, 1),
-                                        width: 5))),
                           ),
-                          clipper: ShapeBorderClipper(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(7))),
-                        ),
-                      ),
-                      onDismissed: (direction) {
-                        setState(() {
-                          _lastRemoved = Map.from(_toDoList[index]);
-                          _lastRemovedPosition = index;
-                          _toDoList.removeAt(index);
-
-                          _saveData();
-
-                          final snack = SnackBar(
-                            backgroundColor: Colors.white,
-                            content: Text(
-                                "Tarefa \"${_lastRemoved["title"]}\" removida com sucesso",
-                                style: TextStyle(color: Colors.grey)),
-                            action: SnackBarAction(
-                                label: "Desfazer",
-                                textColor: Color.fromRGBO(1, 169, 94, 1),
-                                onPressed: () {
-                                  setState(() {
-                                    _toDoList.insert(
-                                        _lastRemovedPosition, _lastRemoved);
-                                    _saveData();
-                                  });
-                                }),
-                            duration: Duration(seconds: 3),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snack);
-                        });
+                          onDismissed: (direction) {
+                            _lastRemoved = _toDoList[index];
+                            TaskEntity task = _toDoList.elementAt(index);
+                            TasksController()
+                                .delete(
+                                task.id
+                            )
+                                .then((value) => {refreshData()})
+                                .then((value) {
+                              final snack = SnackBar(
+                                backgroundColor: Colors.white,
+                                content: Text(
+                                    "Tarefa \"${_lastRemoved.desc}\" removida com sucesso",
+                                    style: TextStyle(color: Colors.grey)),
+                                action: SnackBarAction(
+                                    label: "Desfazer",
+                                    textColor: Color.fromRGBO(1, 169, 94, 1),
+                                    onPressed: () {
+                                      TasksController()
+                                          .create(_lastRemoved)
+                                          .then((value) => {refreshData()});
+                                    }),
+                                duration: Duration(seconds: 3),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(snack);
+                            });
+                          },
+                        );
                       },
-                    );
-                  },
-                  childCount: _toDoList.length,
-                )),
+                      childCount: _toDoList.length,
+                    )),
                 //SliverList(delegate: SliverChildListDelegate([aWidget()]))
               ],
             ),
@@ -329,27 +369,6 @@ class _ToDoListState extends State<ToDoList> {
     );
   }
 
-  Future<File> _getFile() async {
-    final directory = await getApplicationDocumentsDirectory();
-    return File("${directory.path}/data.json");
-  }
-
-  Future<File> _saveData() async {
-    String data = json.encode(_toDoList);
-    final file = await _getFile();
-    return file.writeAsString(data);
-  }
-
-  Future<String?> _readData() async {
-    try {
-      final file = await _getFile();
-
-      return file.readAsString();
-    } catch (e) {
-      return null;
-    }
-  }
-
   void _ModalBottomSheet(context) {
     showModalBottomSheet(
       context: context,
@@ -370,7 +389,7 @@ class _ToDoListState extends State<ToDoList> {
                           decoration: InputDecoration(
                             labelText: "Nova tarefa",
                             labelStyle:
-                                TextStyle(color: Color.fromRGBO(1, 169, 94, 1)),
+                            TextStyle(color: Color.fromRGBO(1, 169, 94, 1)),
                           ),
                         ),
                       ),
@@ -380,7 +399,7 @@ class _ToDoListState extends State<ToDoList> {
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
                           backgroundColor:
-                              Color.fromRGBO(1, 169, 94, 1), // text color
+                          Color.fromRGBO(1, 169, 94, 1), // text color
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(100.0),
                           ),

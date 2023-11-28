@@ -3,11 +3,15 @@ import 'package:doneapp/clients/entities/entity_interface.dart';
 
 class TaskEntity implements EntityInterface {
   TaskEntity({
-    this.id = "",
+
+    this.id
+    = "",
     required this.done,
     required this.desc,
-    required this.date,
-    required this.userId,
+    required
+    this.date
+    ,
+    this.userId = "",
     required this.array,
   });
 

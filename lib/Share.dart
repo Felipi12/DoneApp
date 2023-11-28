@@ -1,8 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math' as math;
+import 'package:social_share/social_share.dart';
+
+
+
 
 class ShareScreen extends StatelessWidget {
+
+  final txtController = TextEditingController();
+
+  @override
+  void dispose() {
+    txtController.dispose();
+    dispose();
+  }
+
+  void compartilhar() {
+    SocialShare.shareOptions(
+      txtController.text
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +56,7 @@ class ShareScreen extends StatelessWidget {
                     padding:
                         EdgeInsets.only(top: 10, bottom: 10, left: 5, right: 5),
                     child: TextField(
+                      controller: txtController,
                       style: TextStyle(fontFamily: 'Roboto'),
                       decoration: const InputDecoration(
                         focusedBorder: OutlineInputBorder(
@@ -78,15 +98,27 @@ class ShareScreen extends StatelessWidget {
                     children: [
                       Padding(
                           padding: EdgeInsets.only(top: 40, bottom: 20),
-                          child: Image.asset(
-                            'assets/x.png',
-                            height: 60,
-                          )),
+                          child: GestureDetector(
+                            onTap: () {
+                              compartilhar();
+                            },
+                            child: Image.asset(
+                              'assets/x.png',
+                              fit: BoxFit.cover,
+                              width: 60.0,
+                            ),
+                          ),),
                       Padding(
                           padding: EdgeInsets.only(top: 40, bottom: 20),
-                          child: Image.asset(
-                            'assets/face.png',
-                            height: 60,
+                          child: GestureDetector(
+                            onTap: () {
+                              compartilhar();
+                            },
+                            child: Image.asset(
+                              'assets/face.png',
+                              fit: BoxFit.cover,
+                              width: 60.0,
+                            ),
                           ))
                     ],
                   )
