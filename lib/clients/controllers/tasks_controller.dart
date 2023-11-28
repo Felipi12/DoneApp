@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doneapp/clients/controllers/authenticator_controller.dart';
 import 'package:doneapp/clients/controllers/base_controller.dart';
 import 'package:doneapp/clients/entities/tasks_entity.dart';
 
@@ -7,7 +8,10 @@ class TasksController extends BaseController {
 
   Future<List<TaskEntity>> getAll() async {
     try {
-      QuerySnapshot querySnapshot = await collection.get();
+      QuerySnapshot querySnapshot = await collection
+          .where('userId',
+              isEqualTo: AuthenticatorController.getLoggedUser().id)
+          .get();
       List<TaskEntity> allTasks = querySnapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return TaskEntity(
@@ -47,7 +51,10 @@ class TasksController extends BaseController {
 
   Future<TaskEntity> create(TaskEntity task) async {
     try {
-      DocumentReference taskDB = await collection.add(task.toObject());
+      Map<String, dynamic> taskToCreate = task.toObject();
+
+      taskToCreate["userId"] = AuthenticatorController.getLoggedUser().id;
+      DocumentReference taskDB = await collection.add(taskToCreate);
 
       DocumentSnapshot documentSnapshot = await taskDB.get();
 
