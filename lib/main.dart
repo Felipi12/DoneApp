@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doneapp/Share.dart';
 import 'package:doneapp/toDo.dart';
+import 'package:doneapp/clients/controllers/appointments_controller.dart';
+import 'package:doneapp/clients/entities/appointment_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -319,25 +321,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       }
     }
 
-    Future createAppointment(
-        String subject, String date, String time, String description) async {
-      try {
-        CollectionReference appointments =
-            FirebaseFirestore.instance.collection('Appointments');
-
-        await appointments.add({
-          'subject': subject,
-          'date': date,
-          'time': time,
-          'description': description,
-        });
-
-        print('Appointment created successfully!');
-      } catch (e) {
-        print('Error creating appointment: $e');
-      }
-    }
-
     // Exibe o diálogo para adicionar um novo compromisso
     showDialog(
       context: context,
@@ -414,13 +397,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               onPressed: () {
                 // TODO: Aqui, você coletaria todas as informações dos campos
                 // e as adicionaria à fonte de dados do seu calendário.
-
-                String subject = subjectController.text;
-                String date = dateController.text;
-                String time = timeController.text;
-                String description = descriptionController.text;
-
-                createAppointment(subject, date, time, description);
                 Navigator.of(context).pop();
               },
             ),
