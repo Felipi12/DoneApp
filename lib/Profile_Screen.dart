@@ -1,4 +1,6 @@
 // Importa os pacotes necessários
+// ignore_for_file: unused_import
+
 import 'LoginScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doneapp/main.dart';
@@ -8,7 +10,6 @@ import 'Agenda.dart';
 import 'Profile_Screen.dart';
 import 'Métricas.dart';
 import 'AppBar.dart';
-import 'main.dart';
 import 'firebase_options.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,9 +19,10 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var currentTheme = Theme.of(context);
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromRGBO(1, 169, 94, 1),
+          backgroundColor: currentTheme.primaryColor,
           toolbarHeight: 70,
           title: Padding(
               padding: EdgeInsets.only(left: 95),
@@ -50,8 +52,8 @@ class ProfileScreen extends StatelessWidget {
                       child: Container(
                           height: 200,
                           width: 900,
-                          decoration: const BoxDecoration(
-                            color: Color.fromRGBO(1, 169, 94, 1),
+                          decoration: BoxDecoration(
+                            color: currentTheme.primaryColor,
                             borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(300),
                               bottomRight: Radius.circular(300),
@@ -77,13 +79,13 @@ class ProfileScreen extends StatelessWidget {
                       child: Text(
                         '_USERNAME',
                         style: TextStyle(
-                            fontSize: 24, color: Color.fromRGBO(1, 169, 94, 1)),
+                            fontSize: 24, color: currentTheme.primaryColor),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 40, right: 40),
                       child: Divider(
-                        color: Color.fromRGBO(1, 169, 94, 1),
+                        color: currentTheme.primaryColor,
                         thickness: 1.5,
                       ),
                     ),
@@ -98,7 +100,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     CircleAvatar(
                       radius: 2,
-                      backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+                      backgroundColor: currentTheme.primaryColor,
                     ),
                     Padding(
                       padding: EdgeInsets.only(
@@ -111,7 +113,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     CircleAvatar(
                       radius: 2,
-                      backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+                      backgroundColor: currentTheme.primaryColor,
                     ),
                     Padding(
                       padding: EdgeInsets.only(
@@ -124,7 +126,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     CircleAvatar(
                       radius: 2,
-                      backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+                      backgroundColor: currentTheme.primaryColor,
                     ),
                     Padding(
                       padding: EdgeInsets.only(
@@ -151,7 +153,7 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                         style: TextButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(1, 169, 94, 1)),
+                            backgroundColor: currentTheme.primaryColor),
                         child: Text(
                           'LOGOUT',
                           style: TextStyle(

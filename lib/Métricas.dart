@@ -74,6 +74,7 @@ class BarChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var currentTheme = Theme.of(context);
     List<BarChartGroupData> generateBarGroups() {
       return List.generate(barChartData.length, (index) {
         return BarChartGroupData(
@@ -81,7 +82,7 @@ class BarChartWidget extends StatelessWidget {
           barRods: [
             BarChartRodData(
               toY: barChartData[index].toDouble(),
-              color: Color.fromRGBO(1, 169, 94, 1), // Set the color to green
+              color: currentTheme.primaryColor, // Set the color to green
               width: 28,
               borderRadius: BorderRadius.circular(2),
             ),
@@ -197,6 +198,7 @@ class _PieChartWidgetState extends State<PieChartWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var currentTheme = Theme.of(context);
     return Column(
       children: [
         Align(
@@ -229,12 +231,13 @@ class _PieChartWidgetState extends State<PieChartWidget> {
               centerSpaceRadius: 0,
               sections: [
                 PieChartSectionData(
-                  color: Color.fromRGBO(
-                      1, 169, 94, 1), // Green color for 'Concluídas'
+                  color:
+                      currentTheme.primaryColor, // Green color for 'Concluídas'
+r for 'Concluídas'
                   value:
                   _metrics["done"]?.toDouble(), // Adjust value accordingly
                   title: _metricsPercentage[
-                  "done"], // You can include the percentage here
+                  "done"],
                   radius: 90,
                   titleStyle: TextStyle(
                     fontSize: 16,
@@ -282,7 +285,7 @@ class _PieChartWidgetState extends State<PieChartWidget> {
             Row(children: <Widget>[
               CircleAvatar(
                 radius: 10,
-                backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+                backgroundColor: currentTheme.primaryColor,
               ),
               Padding(
                   padding: EdgeInsets.only(left: 5),

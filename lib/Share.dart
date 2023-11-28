@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math' as math;
@@ -24,6 +26,7 @@ class ShareScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var currentTheme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
@@ -51,7 +54,7 @@ class ShareScreen extends StatelessWidget {
                 padding: EdgeInsets.only(left: 15, bottom: 15, right: 15),
                 child: Card(
                   surfaceTintColor: Colors.white,
-                  color: Colors.white,
+                  color: currentTheme.scaffoldBackgroundColor,
                   child: Padding(
                     padding:
                         EdgeInsets.only(top: 10, bottom: 10, left: 5, right: 5),
@@ -67,13 +70,7 @@ class ShareScreen extends StatelessWidget {
                           borderSide: BorderSide(
                               color: Color.fromRGBO(1, 169, 94, 1), width: 1.0),
                         ),
-                        labelText: 'Digite aqui a sua mensagem',
-                        labelStyle: TextStyle(fontFamily: 'Roboto'),
-                        border: OutlineInputBorder(),
                       ),
-                      maxLines: 8,
-                    ),
-                  ),
                   elevation: 3,
                 ),
               ),

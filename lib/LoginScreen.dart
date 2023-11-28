@@ -1,4 +1,6 @@
 // Importa os pacotes necessários
+// ignore_for_file: unused_import
+
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doneapp/clients/controllers/authenticator_controller.dart';
@@ -9,7 +11,6 @@ import 'Agenda.dart';
 import 'Profile_Screen.dart';
 import 'Métricas.dart';
 import 'AppBar.dart';
-import 'main.dart';
 import 'firebase_options.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -46,19 +47,22 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var currentTheme = Theme.of(context);
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: currentTheme.scaffoldBackgroundColor,
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: const Color.fromRGBO(1, 169, 94, 1),
+          backgroundColor: currentTheme.primaryColor,
           toolbarHeight: 70,
           centerTitle: true,
           title: Padding(
               padding: EdgeInsets.only(),
               child: Text('Login',
                   style: TextStyle(
-                      color: Colors.white, fontFamily: 'RedHatDisplay'))),
-          iconTheme: const IconThemeData(color: Colors.white, size: 40),
+                      color: currentTheme.scaffoldBackgroundColor,
+                      fontFamily: 'RedHatDisplay'))),
+          iconTheme: IconThemeData(
+              color: currentTheme.scaffoldBackgroundColor, size: 40),
         ),
         body: SingleChildScrollView(
             child: Container(
@@ -94,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(
                                 fontSize: 24,
                                 fontFamily: "RedHatDisplay",
-                                color: Color.fromRGBO(1, 169, 94, 1)),
+                                color: currentTheme.primaryColor),
                           ),
                         ),
                         Padding(
@@ -105,17 +109,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                 top: 10, bottom: 0, left: 15, right: 15),
                             child: TextField(
                               controller: userController,
-                              style:
+                             style:
                                   TextStyle(fontFamily: 'Roboto', height: 0.1),
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Color.fromRGBO(1, 169, 94, 1),
+                                      color: currentTheme.primaryColor,
                                       width: 0.5),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Color.fromRGBO(1, 169, 94, 1),
+                                      color: currentTheme.primaryColor,
                                       width: 0.5),
                                 ),
                                 labelText: 'Username',
@@ -142,12 +146,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Color.fromRGBO(1, 169, 94, 1),
+                                      color: currentTheme.primaryColor,
                                       width: 1.0),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Color.fromRGBO(1, 169, 94, 1),
+                                      color: currentTheme.primaryColor,
                                       width: 1.0),
                                 ),
                                 labelText: 'Password',
@@ -195,9 +199,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                 ),
                               );
-                            },
-                            style: TextButton.styleFrom(
-                                backgroundColor: Color.fromRGBO(1, 169, 94, 1)),
+                            },                            style: TextButton.styleFrom(
+                                backgroundColor: currentTheme.primaryColor),
                             child: Text(
                               'LOGIN',
                               style: TextStyle(
