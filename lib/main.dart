@@ -20,7 +20,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  primaryColor: Colors.green[1000],
+  primaryColor: Color.fromRGBO(39, 66, 40, 1.0),
   scaffoldBackgroundColor: Colors.black,
   textTheme: TextTheme(
     bodyLarge: TextStyle(color: Colors.white),
@@ -405,7 +405,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               child: const Text('OK'),
               onPressed: () {
                 // TODO: Aqui, você coletaria todas as informações dos campos
-                AppointmentsController().create(AppointmentEntity(startTime: _updateDateField, endTime: endTime, color: color, description: subjectController.text))
                 // e as adicionaria à fonte de dados do seu calendário.
                 Navigator.of(context).pop();
               },
@@ -425,47 +424,57 @@ class CustomSwitch extends StatefulWidget {
 }
 
 class CustomSwitchState extends State<CustomSwitch> {
-  bool _isSwitched = false;
-  int actualTheme = 0;
-
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      trailing: Stack(
-        clipBehavior: Clip.none,
-        children: <Widget>[
-          Switch(
-            trackOutlineColor: MaterialStateProperty.resolveWith(
-              (final Set<MaterialState> states) {
-                if (states.contains(MaterialState.selected)) {
-                  return null;
-                }
-
-                return Colors.transparent;
-              },
+    return ValueListenableBuilder(
+        valueListenable: isDarkMode,
+        builder: (context, bool isDark, _) {
+          return ListTile(
+            trailing: Stack(
+              clipBehavior: Clip.none,
+              children: <Widget>[
+                Switch(
+                  trackOutlineColor: MaterialStateProperty.resolveWith(
+                        (final Set<MaterialState> states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return null;
+                      }
+                      return Colors.transparent;
+                    },
+                  ),
+                  activeTrackColor: Colors.black,
+                  inactiveThumbColor: Colors.white,
+                  inactiveTrackColor: Colors.grey,
+                  activeColor: Colors.white,
+                  value: isDark,
+                  onChanged: (value) {
+                    isDarkMode.value = value;
+                  },
+                ),
+                Positioned(
+                  top: -20,
+                  left: 18,
+                  child: Icon(
+                      isDark
+                          ? Icons.nightlight_outlined
+                          : Icons.wb_sunny_outlined,
+                      size: 20,
+                      color: Colors.white),
+                ),
+              ],
             ),
-            activeTrackColor: Colors.grey,
-            inactiveThumbColor: Colors.white,
-            inactiveTrackColor: Colors.grey,
-            activeColor: Colors.white,
-            value: _isSwitched,
-            onChanged: (value) {
-              actualTheme=1;
-              setState(() {
-                _isSwitched = value;
-              });
-            },
-          ),
-          leading: const Icon(
-            Icons.format_size,
-            color: Colors.white,
-            size: 40,
-          ),
+            leading: const Icon(
+              Icons.format_size,
+              color: Colors.white,
+              size: 40,
+            ),
+          );
+          },
         );
-      },
-    );
-  }
+    }
 }
+
+
 
 // Constrói o Drawer/Sidebar
 class CustomDrawer extends StatelessWidget {

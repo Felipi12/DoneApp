@@ -233,7 +233,6 @@ class _PieChartWidgetState extends State<PieChartWidget> {
                 PieChartSectionData(
                   color:
                       currentTheme.primaryColor, // Green color for 'Concluídas'
-r for 'Concluídas'
                   value:
                   _metrics["done"]?.toDouble(), // Adjust value accordingly
                   title: _metricsPercentage[

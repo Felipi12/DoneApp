@@ -70,10 +70,9 @@ class ShareScreen extends StatelessWidget {
                           borderSide: BorderSide(
                               color: Color.fromRGBO(1, 169, 94, 1), width: 1.0),
                         ),
-                      ),
+                      ),),),
                   elevation: 3,
-                ),
-              ),
+              ),),
               Padding(
                 padding: EdgeInsets.only(left: 30, bottom: 15, right: 30),
                 child: Text(
