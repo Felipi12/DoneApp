@@ -1,7 +1,6 @@
 // Importa os pacotes necessários
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'AppBar.dart';
 
 // Constrói o calendário da tela de Agenda
 class TabViewItem_1 extends StatelessWidget {
@@ -12,9 +11,11 @@ class TabViewItem_1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SfCalendar(
+      selectionDecoration: BoxDecoration(color:Colors.grey[100]),
+      todayHighlightColor: Color.fromRGBO(1, 169, 94, 1),
       viewHeaderStyle:
           ViewHeaderStyle(dateTextStyle: TextStyle(fontFamily: 'Roboto')),
-      todayTextStyle: TextStyle(fontFamily: 'RedHatDisplay'),
+      todayTextStyle: TextStyle(fontFamily: 'Roboto'),
       appointmentTextStyle:
           TextStyle(color: Colors.white, fontFamily: 'Roboto'),
       showNavigationArrow: true,
@@ -22,11 +23,6 @@ class TabViewItem_1 extends StatelessWidget {
       headerStyle:
           CalendarHeaderStyle(textStyle: TextStyle(fontFamily: 'Roboto')),
       view: CalendarView.week,
-      showWeekNumber: true,
-      weekNumberStyle: const WeekNumberStyle(
-        backgroundColor: Colors.grey,
-        textStyle: TextStyle(color: Colors.black, fontSize: 13),
-      ),
       allowedViews: const [
         CalendarView.day,
         CalendarView.week,
@@ -54,6 +50,7 @@ class TabViewItem_1 extends StatelessWidget {
   }
 }
 
+// MOCK DE DADOS
 class CalendarDataSourceUtility {
   static DataSource getCalendarDataSource() {
     final List<Appointment> appointments = <Appointment>[];
@@ -70,12 +67,6 @@ class CalendarDataSourceUtility {
       color: Colors.lightBlueAccent,
     ));
     appointments.add(Appointment(
-      startTime: DateTime.now().add(const Duration(hours: 6)),
-      endTime: DateTime.now().add(const Duration(hours: 7)),
-      subject: 'Performance check',
-      color: Colors.amber,
-    ));
-    appointments.add(Appointment(
       startTime: DateTime(2023, 11, 22, 1, 0, 0),
       endTime: DateTime(2023, 11, 22, 3, 0, 0),
       subject: 'Support',
@@ -85,7 +76,7 @@ class CalendarDataSourceUtility {
       startTime: DateTime(2023, 11, 24, 3, 0, 0),
       endTime: DateTime(2023, 11, 24, 4, 0, 0),
       subject: 'Retrospective',
-      color: Colors.purple,
+      color: Color.fromRGBO(1, 169, 94, 0.5),
     ));
 
     return DataSource(appointments);
