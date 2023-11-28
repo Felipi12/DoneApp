@@ -17,6 +17,7 @@ class ToDoList extends StatefulWidget {
 }
 
 class _ToDoListState extends State<ToDoList> {
+
   final _toDoController = TextEditingController();
   List<DateTime> currentMonthList = List.empty();
   DateTime currentDateTime =
@@ -197,6 +198,7 @@ class _ToDoListState extends State<ToDoList> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 85,
@@ -295,7 +297,7 @@ class _ToDoListState extends State<ToDoList> {
                                 ),
                                 height: 50,
                                 decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: currentTheme.scaffoldBackgroundColor,
                                     border: Border(
                                         right: BorderSide(
                                             color: _toDoList[index].done

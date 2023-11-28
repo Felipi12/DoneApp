@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: TextField(
                               controller: userController,
                              style:
-                                  TextStyle(fontFamily: 'Roboto', height: 0.1),
+                                  TextStyle(fontFamily: 'Roboto', height: 0.1, color: Colors.grey),
                               decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
@@ -123,8 +123,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       width: 0.5),
                                 ),
                                 labelText: 'Username',
-                                hintText: 'testandoo',
-                                helperText: 'tstststst',
+                                hintText: 'Digite aqui o seu usuário',
+                                helperText: 'Atente-se aos dados corretos',
                                 labelStyle: TextStyle(fontFamily: 'Roboto'),
                                 border: OutlineInputBorder(),
                               ),
@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: TextField(
                               controller: passwordController,
                               style:
-                                  TextStyle(fontFamily: 'Roboto', height: 0.1),
+                                  TextStyle(fontFamily: 'Roboto', height: 0.1, color:Colors.grey),
                               obscureText: _obscureText,
                               decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
@@ -155,6 +155,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       width: 1.0),
                                 ),
                                 labelText: 'Password',
+                                hintText: 'Digite aqui a sua senha',
+                                helperText: 'Atente-se às regras',
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     // Change this icon based on the _obscureText state

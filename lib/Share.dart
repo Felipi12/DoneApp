@@ -60,8 +60,11 @@ class ShareScreen extends StatelessWidget {
                         EdgeInsets.only(top: 10, bottom: 10, left: 5, right: 5),
                     child: TextField(
                       controller: txtController,
-                      style: TextStyle(fontFamily: 'Roboto'),
+                      style: TextStyle(fontFamily: 'Roboto', color: Colors.grey),
                       decoration: const InputDecoration(
+                        labelText: 'Digite o que será compartilhado',
+                        hintText: 'Digite aqui suas métricas relevantes!',
+                        helperText: 'Atente-se às regras de limite de caracteres da plataforma',
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                               color: Color.fromRGBO(1, 169, 94, 1), width: 1.0),
