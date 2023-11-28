@@ -1,18 +1,33 @@
+import 'package:doneapp/clients/controllers/tasks_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math' as math;
 
-class MetricsTab extends StatelessWidget {
-  // Mock data for each day of the week
-  final List<int> barChartData = [
-    5,
-    8,
-    10,
-    7,
-    9,
-    4,
-    6
+class MetricsTab extends StatefulWidget {
+  @override
+  _MetricsTaState createState() => _MetricsTaState();
+}
+
+class _MetricsTaState extends State<MetricsTab> {
+  List<int> _barChartData = [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
   ]; // Example: [SEG, TER, QUA, QUI, SEX, SAB, DOM]
+
+  @override
+  void initState() {
+    TasksController().getTasksCountPerDay().then((value) {
+      setState(() {
+        _barChartData = value;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +57,7 @@ class MetricsTab extends StatelessWidget {
                 ),
               ),
             ),
-            BarChartWidget(barChartData: barChartData),
+            BarChartWidget(barChartData: _barChartData),
             SizedBox(height: 5),
             PieChartWidget(),
           ],
@@ -81,7 +96,7 @@ class BarChartWidget extends StatelessWidget {
     return Container(
       height: 200,
       padding:
-          EdgeInsets.fromLTRB(16.0, 12.0, 25.0, 0), // Increased left padding
+      EdgeInsets.fromLTRB(16.0, 12.0, 25.0, 0), // Increased left padding
       child: BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceEvenly,
@@ -130,7 +145,7 @@ class BarChartWidget extends StatelessWidget {
                   );
                 },
                 interval:
-                    2, // Set interval to control the frequency of the labels
+                2, // Set interval to control the frequency of the labels
                 reservedSize: 30, // Adjust if necessary
               ),
             ),
@@ -146,7 +161,41 @@ class BarChartWidget extends StatelessWidget {
   }
 }
 
-class PieChartWidget extends StatelessWidget {
+class PieChartWidget extends StatefulWidget {
+  @override
+  _PieChartWidgetState createState() => _PieChartWidgetState();
+}
+
+class _PieChartWidgetState extends State<PieChartWidget> {
+  Map<String, int> _metrics = {"pending": 0, "late": 0, "done": 0};
+  Map<String, String> _metricsPercentage = {
+    "pending": "0%",
+    "late": "0%",
+    "done": "0%"
+  };
+
+  @override
+  void initState() {
+    TasksController().getMonthMetrics().then((value) {
+      setState(() {
+        _metrics = value;
+        _metricsPercentage["pending"] = getPercentage("pending");
+        _metricsPercentage["late"] = getPercentage("late");
+        _metricsPercentage["done"] = getPercentage("done");
+      });
+    });
+    super.initState();
+  }
+
+  String getPercentage(String key) {
+    int total = _metrics["pending"]! + _metrics["late"]! + _metrics["done"]!;
+
+    double percentage = _metrics[key]! / total * 100;
+    double roundedPercentage = double.parse(percentage.toStringAsFixed(2));
+
+    return "$roundedPercentage %";
+  }
+
   @override
   Widget build(BuildContext context) {
     var currentTheme = Theme.of(context);
@@ -184,8 +233,11 @@ class PieChartWidget extends StatelessWidget {
                 PieChartSectionData(
                   color:
                       currentTheme.primaryColor, // Green color for 'Concluídas'
-                  value: 40, // Adjust value accordingly
-                  title: '40%', // You can include the percentage here
+r for 'Concluídas'
+                  value:
+                  _metrics["done"]?.toDouble(), // Adjust value accordingly
+                  title: _metricsPercentage[
+                  "done"],
                   radius: 90,
                   titleStyle: TextStyle(
                     fontSize: 16,
@@ -196,8 +248,10 @@ class PieChartWidget extends StatelessWidget {
                 PieChartSectionData(
                   color: Color.fromRGBO(
                       237, 232, 100, 0.41), // Yellow color for 'Pendentes'
-                  value: 30, // Adjust value accordingly
-                  title: '30%', // You can include the percentage here
+                  value: _metrics["pending"]
+                      ?.toDouble(), // Adjust value accordingly
+                  title: _metricsPercentage[
+                  "pending"], // You can include the percentage here
                   radius: 90,
                   titleStyle: TextStyle(
                     fontSize: 16,
@@ -208,8 +262,10 @@ class PieChartWidget extends StatelessWidget {
                 PieChartSectionData(
                   color: Color.fromRGBO(
                       237, 100, 100, 0.68), // Red color for 'Expiradas'
-                  value: 30, // Adjust value accordingly
-                  title: '30%', // You can include the percentage here
+                  value:
+                  _metrics["late"]?.toDouble(), // Adjust value accordingly
+                  title: _metricsPercentage[
+                  "late"], // You can include the percentage here
                   radius: 90,
                   titleStyle: TextStyle(
                     fontSize: 16,

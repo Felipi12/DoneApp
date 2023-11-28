@@ -20,14 +20,14 @@ import 'package:firebase_core/firebase_core.dart';
 
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  primaryColor: Colors.green[900],
+  primaryColor: Colors.green[1000],
   scaffoldBackgroundColor: Colors.black,
   textTheme: TextTheme(
     bodyLarge: TextStyle(color: Colors.white),
     bodyMedium: TextStyle(color: Colors.white),
   ),
   iconTheme: IconThemeData(
-    color: Colors.green[900],
+    color: Colors.green[1000],
   ),
 );
 
@@ -61,12 +61,18 @@ class SplashScreenApp extends StatelessWidget {
   }
 }
 
+
+
+
 class HomeView extends StatefulWidget {
   @override
   _HomeViewState createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
+
+  static final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
+
   @override
   void initState() {
     super.initState();
@@ -161,6 +167,7 @@ class MyApp extends StatelessWidget {
           ],
         );
       },
+
     );
   }
 }
@@ -398,6 +405,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               child: const Text('OK'),
               onPressed: () {
                 // TODO: Aqui, você coletaria todas as informações dos campos
+                AppointmentsController().create(AppointmentEntity(startTime: _updateDateField, endTime: endTime, color: color, description: subjectController.text))
                 // e as adicionaria à fonte de dados do seu calendário.
                 Navigator.of(context).pop();
               },
@@ -417,44 +425,36 @@ class CustomSwitch extends StatefulWidget {
 }
 
 class CustomSwitchState extends State<CustomSwitch> {
+  bool _isSwitched = false;
+  int actualTheme = 0;
+
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: isDarkMode,
-      builder: (context, bool isDark, _) {
-        return ListTile(
-          trailing: Stack(
-            clipBehavior: Clip.none,
-            children: <Widget>[
-              Switch(
-                trackOutlineColor: MaterialStateProperty.resolveWith(
-                  (final Set<MaterialState> states) {
-                    if (states.contains(MaterialState.selected)) {
-                      return null;
-                    }
-                    return Colors.transparent;
-                  },
-                ),
-                activeTrackColor: Colors.black,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: Colors.grey,
-                activeColor: Colors.white,
-                value: isDark,
-                onChanged: (value) {
-                  isDarkMode.value = value;
-                },
-              ),
-              Positioned(
-                top: -20,
-                left: 18,
-                child: Icon(
-                    isDark
-                        ? Icons.nightlight_outlined
-                        : Icons.wb_sunny_outlined,
-                    size: 20,
-                    color: Colors.white),
-              ),
-            ],
+    return ListTile(
+      trailing: Stack(
+        clipBehavior: Clip.none,
+        children: <Widget>[
+          Switch(
+            trackOutlineColor: MaterialStateProperty.resolveWith(
+              (final Set<MaterialState> states) {
+                if (states.contains(MaterialState.selected)) {
+                  return null;
+                }
+
+                return Colors.transparent;
+              },
+            ),
+            activeTrackColor: Colors.grey,
+            inactiveThumbColor: Colors.white,
+            inactiveTrackColor: Colors.grey,
+            activeColor: Colors.white,
+            value: _isSwitched,
+            onChanged: (value) {
+              actualTheme=1;
+              setState(() {
+                _isSwitched = value;
+              });
+            },
           ),
           leading: const Icon(
             Icons.format_size,

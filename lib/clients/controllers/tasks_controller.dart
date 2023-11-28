@@ -10,12 +10,18 @@ class TasksController extends BaseController {
     try {
       QuerySnapshot querySnapshot = await collection
           .where('userId',
-              isEqualTo: AuthenticatorController.getLoggedUser().id)
+          isEqualTo: AuthenticatorController.getLoggedUser().id)
           .get();
-      List<TaskEntity> allTasks = querySnapshot.docs.map((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      List<TaskEntity> allTasks =
+      querySnapshot.docs.map
+        ((doc) {
+        Map<String, dynamic> data =
+        doc.data
+          () as Map<String, dynamic>;
         return TaskEntity(
-          id: doc.id,
+          id:
+          doc.id
+          ,
           done: data['done'],
           desc: data['desc'],
           date: data['date'],
@@ -34,9 +40,13 @@ class TasksController extends BaseController {
     try {
       DocumentSnapshot documentSnapshot = await collection.doc(id).get();
       Map<String, dynamic> data =
-          documentSnapshot.data() as Map<String, dynamic>;
+
+      documentSnapshot.data
+        () as Map<String, dynamic>;
       return TaskEntity(
-        id: documentSnapshot.id,
+        id:
+        documentSnapshot.id
+        ,
         done: data['done'],
         desc: data['desc'],
         date: data['date'],
@@ -59,10 +69,14 @@ class TasksController extends BaseController {
       DocumentSnapshot documentSnapshot = await taskDB.get();
 
       Map<String, dynamic> data =
-          documentSnapshot.data() as Map<String, dynamic>;
+
+      documentSnapshot.data
+        () as Map<String, dynamic>;
 
       return TaskEntity(
-        id: documentSnapshot.id,
+        id:
+        documentSnapshot.id
+        ,
         done: data['done'],
         desc: data['desc'],
         date: data['date'],
@@ -77,15 +91,23 @@ class TasksController extends BaseController {
 
   Future<TaskEntity> update(TaskEntity task) async {
     try {
-      await collection.doc(task.id).update(task.toObject());
+      await collection.doc(
+          task.id
+      ).update(task.toObject());
 
-      DocumentSnapshot documentSnapshot = await collection.doc(task.id).get();
+      DocumentSnapshot documentSnapshot = await collection.doc(
+          task.id
+      ).get();
 
       Map<String, dynamic> data =
-          documentSnapshot.data() as Map<String, dynamic>;
+
+      documentSnapshot.data
+        () as Map<String, dynamic>;
 
       return TaskEntity(
-        id: documentSnapshot.id,
+        id:
+        documentSnapshot.id
+        ,
         done: data['done'],
         desc: data['desc'],
         date: data['date'],
@@ -107,19 +129,42 @@ class TasksController extends BaseController {
     }
   }
 
+  Future<Map<String, int>> getMonthMetrics() async {
+    List<TaskEntity> pendingTasks =
+    await this.getFilteredTasks(currentWeek: false, status: "Pending");
+
+    List<TaskEntity> lateTasks =
+    await this.getFilteredTasks(currentWeek: false, status: "Late");
+
+    List<TaskEntity> doneTasks =
+    await this.getFilteredTasks(currentWeek: false, status: "Done");
+    print(lateTasks);
+    return {
+      "pending": pendingTasks.length,
+      "late": lateTasks.length,
+      "done": doneTasks.length,
+    };
+  }
+
   Future<List<TaskEntity>> getFilteredTasks({
     required String status, // "Pending", "Done", "Late"
     required bool currentWeek,
   }) async {
     try {
-      DateTime today = DateTime.now();
+      DateTime today =
+      DateTime.now
+        ();
       DateTime startDate;
       DateTime endDate;
 
       if (currentWeek) {
         startDate =
-            DateTime(today.year, today.month, today.day - today.weekday);
-        endDate = DateTime(today.year, today.month, today.day - today.weekday)
+            DateTime(today.year, today.month,
+                today.day
+                    - today.weekday);
+        endDate = DateTime(today.year, today.month,
+            today.day
+                - today.weekday)
             .add(Duration(days: 7));
       } else {
         startDate = DateTime(today.year, today.month, 1);
@@ -162,23 +207,72 @@ class TasksController extends BaseController {
     }
   }
 
+  Future<List<int>> getTasksCountPerDay() async {
+    try {
+      DateTime today =
+      DateTime.now
+        ();
+      DateTime startDate =
+      DateTime(today.year, today.month,
+          today.day
+              - today.weekday);
+
+      List<int> tasksCountPerDay = [];
+
+      for (int i = 0; i < 7; i++) {
+        DateTime currentDay = startDate.add(Duration(days: i));
+
+        // Filter tasks for the current day
+        List<TaskEntity> tasks = await getFilteredTasks(
+          status:
+          "Done", // Change this to the desired status or remove if not needed
+          currentWeek: true,
+        );
+
+        // Count tasks for the current day
+
+        int tasksCount = tasks
+            .where((task) =>
+        task.date.toDate().year == currentDay.year &&
+            task.date.toDate().month == currentDay.month &&
+            task.date.toDate().day ==
+                currentDay.day
+        )
+            .length;
+
+        tasksCountPerDay.add(tasksCount);
+      }
+
+      return tasksCountPerDay;
+    } catch (e) {
+      print('Error getting tasks count per day: $e');
+      rethrow;
+    }
+  }
+
   List<TaskEntity> _mapQuerySnapshotToTaskList(QuerySnapshot querySnapshot) {
-    return querySnapshot.docs.map((doc) {
-      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-      return TaskEntity(
-        id: doc.id,
-        done: data['done'],
-        desc: data['desc'],
-        date: data['date'],
-        userId: data['userId'],
-        array: data['array'],
-      );
-    }).toList();
+    return
+      querySnapshot.docs.map
+        ((doc) {
+        Map<String, dynamic> data =
+        doc.data
+          () as Map<String, dynamic>;
+        return TaskEntity(
+          id:
+          doc.id
+          ,
+          done: data['done'],
+          desc: data['desc'],
+          date: data['date'],
+          userId: data['userId'],
+          array: data['array'],
+        );
+      }).toList();
   }
 }
 
 
-  /*
+/*
 
   Future testTaskSample() async {
   TasksController tasksController = TasksController();
@@ -186,7 +280,9 @@ class TasksController extends BaseController {
   TaskEntity taskEntity = TaskEntity(
     done: false,
     desc: "Task description",
-    date: Timestamp.fromDate(DateTime.now()),
+    date: Timestamp.fromDate(
+DateTime.now
+()),
     userId: "user123",
     xray: "Some xray information",
   );
@@ -203,10 +299,14 @@ class TasksController extends BaseController {
   print('All tasks: $allTasks');
 
   TaskEntity taskById =
-      await tasksController.getById(taskUpdated.id ?? "");
+      await tasksController.getById(
+taskUpdated.id
+ ?? "");
   print('Task by id: $taskById');
 
-  await tasksController.delete(taskUpdated.id ?? "");
+  await tasksController.delete(
+taskUpdated.id
+ ?? "");
   print('Task deleted');
 
   Future testTaskSample() async {

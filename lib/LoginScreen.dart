@@ -3,6 +3,7 @@
 
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doneapp/clients/controllers/authenticator_controller.dart';
 import 'package:doneapp/main.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -21,6 +22,22 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _obscureText = true;
+
+  final userController = TextEditingController();
+
+  @override
+  void dispose() {
+    userController.dispose();
+    super.dispose();
+  }
+
+  final passwordController = TextEditingController();
+
+  @override
+  void disposePass() {
+    passwordController.dispose();
+    super.dispose();
+  }
 
   void toggleObscureText() {
     setState(() {
@@ -91,7 +108,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             padding: EdgeInsets.only(
                                 top: 10, bottom: 0, left: 15, right: 15),
                             child: TextField(
-                              style:
+                              controller: userController,
+                             style:
                                   TextStyle(fontFamily: 'Roboto', height: 0.1),
                               decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
@@ -121,6 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             padding: EdgeInsets.only(
                                 top: 0, bottom: 5, left: 5, right: 5),
                             child: TextField(
+                              controller: passwordController,
                               style:
                                   TextStyle(fontFamily: 'Roboto', height: 0.1),
                               obscureText: _obscureText,
@@ -158,18 +177,29 @@ class _LoginScreenState extends State<LoginScreen> {
                           padding: EdgeInsets.only(top: 30),
                           width: 150,
                           child: TextButton(
-                            onPressed: () => Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder: (_, __, ___) => OtherScreen(),
-                                transitionDuration: Duration(milliseconds: 50),
-                                transitionsBuilder: (_, animation, __, child) {
-                                  return FadeTransition(
-                                      opacity: animation, child: child);
-                                },
-                              ),
-                            ),
-                            style: TextButton.styleFrom(
+                            onPressed: () async {
+                              try {
+                                await AuthenticatorController.signIn(
+                                    email: userController.text,
+                                    password: passwordController.text);
+                              } catch (e) {
+                                print('Caught an exception: $e');
+                                return;
+                              }
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (_, __, ___) => OtherScreen(),
+                                  transitionDuration:
+                                      Duration(milliseconds: 50),
+                                  transitionsBuilder:
+                                      (_, animation, __, child) {
+                                    return FadeTransition(
+                                        opacity: animation, child: child);
+                                  },
+                                ),
+                              );
+                            },                            style: TextButton.styleFrom(
                                 backgroundColor: currentTheme.primaryColor),
                             child: Text(
                               'LOGIN',

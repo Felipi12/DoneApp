@@ -24,7 +24,6 @@ class AuthenticatorController {
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided.');
       } else {
-        print('Error while logging in');
         rethrow;
       }
     }
