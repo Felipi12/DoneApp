@@ -225,7 +225,7 @@ class _ToDoListState extends State<ToDoList> {
             child: FloatingActionButton(
               elevation: 1,
               child: Icon(Icons.add, color: Colors.white),
-              backgroundColor: Color.fromRGBO(1, 169, 94, 1),
+              backgroundColor: currentTheme.primaryColor,
               tooltip: "Adicionar tarefa",
               onPressed: () {
                 _ModalBottomSheet(context);

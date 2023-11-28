@@ -1,6 +1,9 @@
 // Importa os pacotes necessários
 // ignore_for_file: unused_import
 
+import 'package:doneapp/clients/controllers/authenticator_controller.dart';
+import 'package:doneapp/clients/controllers/user_controller.dart';
+
 import 'LoginScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doneapp/main.dart';
@@ -77,7 +80,7 @@ class ProfileScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(top: 20, left: 40, right: 40),
                       child: Text(
-                        '_USERNAME',
+                        AuthenticatorController.getLoggedUser().email,
                         style: TextStyle(
                             fontSize: 24, color: currentTheme.primaryColor),
                       ),
@@ -93,20 +96,7 @@ class ProfileScreen extends StatelessWidget {
                       padding: EdgeInsets.only(
                           top: 25, left: 30, bottom: 15, right: 30),
                       child: Text(
-                        '_NOME_COMPLETO',
-                        style: TextStyle(fontSize: 16, color: Colors.grey[400]),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    CircleAvatar(
-                      radius: 2,
-                      backgroundColor: currentTheme.primaryColor,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: 25, left: 30, bottom: 15, right: 30),
-                      child: Text(
-                        '_IDADE',
+                        AuthenticatorController.getLoggedUser().name,
                         style: TextStyle(fontSize: 16, color: Colors.grey[400]),
                         textAlign: TextAlign.center,
                       ),
